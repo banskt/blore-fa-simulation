@@ -4,6 +4,9 @@ source CONFIG
 
 SUBDIR="submission_scripts"
 
+## Do we need to create weighted LD for this simulation?
+source ${SUBDIR}/check_weighted_ld # creates RUN_WEIGHTED_LD variable and LOCIPREFIX array
+
 for (( SIM=$START; SIM<=$END; SIM++ )); do 
 
     INDEX=`echo $SIM | awk '{printf "%03d", $1}'`
@@ -22,16 +25,21 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     cd ${THIS_JOBSUBDIR}
 
-    source ${SUBDIR}/create_phenotype
-    source ${SUBDIR}/snptest
+    source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
+    source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
     ## source ${SUBDIR}/gen_inflation # now included in meta
-    source ${SUBDIR}/blore_summary
-    source ${SUBDIR}/bimbam_summary
-    source ${SUBDIR}/meta
-    source ${SUBDIR}/blore_meta_without_features
-    source ${SUBDIR}/blore_meta_with_features
-    source ${SUBDIR}/bimbam_meta
-    source ${SUBDIR}/weighted_ld
+    source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
+    source ${SUBDIR}/bimbam_summary				# BIMBAM_SUMMARY_JOBNAME
+    source ${SUBDIR}/meta					# META_JOBNAME
+    source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
+    source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
+    source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
+    source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
+    #source ${SUBDIR}/paintor
+    #source ${SUBDIR}/paintorfa
+    #source ${SUBDIR}/caviarbf
+    #source ${SUBDIR}/finemap
+    #source ${SUBDIR}/metacca
 
     cd $CURDIR
 
