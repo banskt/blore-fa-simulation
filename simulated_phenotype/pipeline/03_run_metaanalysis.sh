@@ -25,17 +25,17 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     cd ${THIS_JOBSUBDIR}
 
-    source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
-    source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
-    ## source ${SUBDIR}/gen_inflation # now included in meta
-    source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
-    source ${SUBDIR}/bimbam_summary				# BIMBAM_SUMMARY_JOBNAME
-    source ${SUBDIR}/meta					# META_JOBNAME
-    source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
-    source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
-    source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
-    source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
-    #source ${SUBDIR}/paintor
+    #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
+    #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
+    ### source ${SUBDIR}/gen_inflation # now included in meta
+    #source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
+    #source ${SUBDIR}/bimbam_summary				# BIMBAM_SUMMARY_JOBNAME
+    #source ${SUBDIR}/meta					# META_JOBNAME
+    #source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
+    #source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
+    #source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
+    #source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
+    source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
     #source ${SUBDIR}/paintorfa
     #source ${SUBDIR}/caviarbf
     #source ${SUBDIR}/finemap
@@ -57,12 +57,6 @@ done
     ##     9s|_SIMDIR_|${SIMFOLDER}|;
     ##    10s|_NCAUSAL|2|"         ${CAVIARBF_MASTER_JOBSUB} > ${CAVIARBF_C2_JOBNAME}.bsub
     ## bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_C2_JOBNAME}.bsub
-
-    ## # Run PAINTOR =====================================================================
-    ## PAINTOR_JOBNAME="paintor_combinedLD_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${PAINTOR_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|"   ${PAINTOR_MASTER_JOBSUB} > ${PAINTOR_JOBNAME}.bsub
-    ## bsub -w "done(${META_JOBNAME})" < ${PAINTOR_JOBNAME}.bsub
 
     ## # Run metaCCA =====================================================================
     ## METACCA_JOBNAME="metaCCA_${SIM}_${RANDSTRING}"

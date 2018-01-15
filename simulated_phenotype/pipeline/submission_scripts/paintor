@@ -1,0 +1,11 @@
+#!/bin/bash
+
+    # Run PAINTOR======================================================================
+    PAINTOR_JOBNAME="paintor_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${PAINTOR_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_LD_DIR_|${LDMAPDIR}|g;
+         s|_PAINTOR|${PAINTOR}|g;" ${MASTER_JOBSUBDIR}/paintor.bsub > ${PAINTOR_JOBNAME}.bsub
+    #bsub -w "done(${META_JOBNAME})" < ${PAINTOR_JOBNAME}.bsub
+    bsub < ${PAINTOR_JOBNAME}.bsub
+    # =================================================================================

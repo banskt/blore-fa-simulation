@@ -23,6 +23,7 @@ SNPTEST="${HOME}/packages/SNPTEST/snptest_v2.5.4-beta3_linux_x86_64_dynamic/snpt
 META="${HOME}/packages/META/meta"
 BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
 BLORE="${HOME}/fine-mapping-SNPs/codebase/b-lore/bin/blore"
+PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
 
 # other scripts used in the pipeline
 CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
