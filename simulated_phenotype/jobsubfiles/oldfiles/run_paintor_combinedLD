@@ -1,0 +1,65 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+
+PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/paintor/combined_LD"
+METADIR="${SIMDIR}/snptest/meta"
+LDDIR="${BASEDIR}/ldmap/weighted"
+
+if [ -d ${OUTDIR} ]; then
+    rm -rf ${OUTDIR}
+fi
+
+mkdir -p ${OUTDIR}
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+
+INPUTDIR="input_files"
+mkdir ${INPUTDIR} output
+for file in ${METADIR}/Locus.[0-9]*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    #Create z-score file
+    echo "CHR POS SNP_ID Zscore.meta" > ${INPUTDIR}/${LOCUSFILE}
+    CHR="chr1"
+    tail -n +2 $file > tmp.dat
+    while read p; do
+        BPOS=`echo $p | awk '{print $3}'`
+        RSID=`echo $p | awk '{print $2}'`
+        ZCOM=`echo $p | awk '{m=$8/$9; print m}'`
+        echo ${CHR} ${BPOS} ${RSID} ${ZCOM} >> ${INPUTDIR}/${LOCUSFILE}
+    done < tmp.dat
+    NSNPS=`wc -l tmp.dat | cut -d' ' -f1`
+    rm -rf tmp.dat
+
+    # create input file
+    echo ${FBASE} >> ${INPUTDIR}/input.files
+
+    # annotation files
+    ANNFILE="${INPUTDIR}/${FBASE}.annotations"
+    echo "Coding" > $ANNFILE
+    for (( j=1; j<=${NSNPS}; j++ )); do echo 1 >> $ANNFILE; done
+
+    # ld files
+    LDFILE="${FBASE}.LD"
+    cp ${LDDIR}/${LDFILE} ${INPUTDIR}/${LDFILE}
+ 
+    echo "${FBASE} done."
+done
+
+$PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out output/ -Zhead Zscore.meta -LDname LD -enumerate 2
+rm -rf ${INPUTDIR}/*.LD
+
+cd ${CURDIR}

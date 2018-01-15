@@ -1,0 +1,29 @@
+#!/bin/sh
+#BSUB -J _JOBNAME_
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME_.out
+#BSUB -e _JOBNAME_.err
+#BSUB -n 1
+#BSUB -R span[hosts=1]
+#BSUB -R scratch
+#BSUB -a openmp
+
+SCRIPT=_WGHT_LD
+LOCUSPREFIX=_LOCUSP_
+STUDYNAMES=_STUDYN_
+SAMPLES=_SAMPLES
+SIMDIR=_SIMDIR_
+LDDIR=_LD_DIR_
+
+OUTDIR="${LDDIR}/weighted"
+METAFILE="${SIMDIR}/snptest/meta/${LOCUSPREFIX}.meta.out"
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+
+python ${SCRIPT} --locusprefix ${LOCUSPREFIX} \
+                 --studies ${STUDYNAMES} \
+                 --samples ${SAMPLES} \
+                 --outdir ${OUTDIR} \
+                 --metafile ${METAFILE} \
+                 --lddir ${LDDIR}

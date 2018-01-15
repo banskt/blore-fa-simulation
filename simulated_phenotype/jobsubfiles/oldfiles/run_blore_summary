@@ -1,0 +1,26 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 16
+#BSUB -R span[hosts=1]
+#BSUB -a openmp 
+
+SIMNAME=_SIMDIR_
+STUDY=_GSTUDY_
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+
+BLORE=$HOME/fine-mapping-SNPs/codebase/b-lore/bin/blore
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+LOCIDIR="${BASEDIR}/loci_dosages/${STUDY}"
+SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
+OUTDIR="${SIMDIR}/summary_stat/${STUDY}"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+$BLORE --summary --gen ${LOCIDIR}/Locus.*.gen --sample ${SAMPLEFILE} --out ${OUTDIR} --reg 0.01 --regoptim >> _JOBNAME.mlog 2>> _JOBNAME.merr

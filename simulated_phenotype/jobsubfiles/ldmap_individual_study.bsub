@@ -1,0 +1,27 @@
+#!/bin/sh
+#BSUB -J _JOBNAME_
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME_.out
+#BSUB -e _JOBNAME_.err
+#BSUB -n 1
+#BSUB -R span[hosts=1]
+#BSUB -R scratch
+#BSUB -a openmp
+
+DATADIR="_DATADIR_"
+OUTDIR="_OUTDIR_"
+LOCUSNAMES="_LOCUSNAMES_"
+LDSTORE="_LDSTORE_"
+
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'LOCIPREFIX=($(cat ${LOCUSNAMES}))'
+
+for LOCUS in ${LOCIPREFIX[@]}; do
+    BGENFILE="${DATADIR}/${LOCUS}.bgen"
+    BCORFILE="${OUTDIR}/${LOCUS}.bcor"
+    METAFILE="${OUTDIR}/${LOCUS}.meta"
+    LDMAPFILE="${OUTDIR}/${LOCUS}.LD"
+    ${LDSTORE} --bgen ${BGENFILE} --bcor ${BCORFILE} --n-threads 1
+    ${LDSTORE} --bcor ${BCORFILE}_1 --meta ${METAFILE}
+    ${LDSTORE} --bcor ${BCORFILE}_1 --matrix ${LDMAPFILE}
+done

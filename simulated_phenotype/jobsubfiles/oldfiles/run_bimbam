@@ -1,0 +1,34 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
+
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/bimbam/meta"
+
+CH1="${SIMDIR}/bimbam/G1/output"
+CH2="${SIMDIR}/bimbam/G2/output"
+CH3="${SIMDIR}/bimbam/G3/output"
+CH4="${SIMDIR}/bimbam/G4/output"
+CH5="${SIMDIR}/bimbam/G5/output"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+for i in {1..200}; do
+    INDEX=`echo $i | awk '{printf "%03d", $1}'`
+    FBASE="Locus.${INDEX}"
+    FSSD="${FBASE}.ssd.txt"
+    $BIMBAM -ssd ${CH1}/${FSSD} -ssd ${CH2}/${FSSD} -ssd ${CH3}/${FSSD} -ssd ${CH4}/${FSSD} -ssd ${CH5}/${FSSD} -cc -a 0.1 -l 2 -o ${FBASE}.meta
+done
+cd ${CURDIR}

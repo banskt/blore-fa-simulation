@@ -1,0 +1,9 @@
+#!/bin/bash
+
+RUN_WEIGHTED_LD="false";
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'LOCIPREFIX=($(cat ${LOCUSNAMES}))'
+for LOCUSPREFIX in ${LOCIPREFIX[@]}; do
+    if [[ ! -f  ${LDMAPDIR}/weighted/${LOCUSPREFIX}.LD ]]; then
+        RUN_WEIGHTED_LD="true"
+    fi
+done

@@ -1,0 +1,32 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 16
+#BSUB -R span[hosts=1]
+#BSUB -a openmp 
+
+SIMNAME=_SIMDIR_
+NZ=_NCAUSAL
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+
+BLORE=$HOME/fine-mapping-SNPs/codebase/b-lore/bin/blore
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+SRCDIR="${SIMDIR}/summary_stat"
+OUTDIR="${SIMDIR}/blore/zmax${NZ}_mu0_pi0.01_sig0.01"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+
+$BLORE --meta --statinfo ${SRCDIR}/G1/G1_summary \
+                         ${SRCDIR}/G2/G2_summary \
+                         ${SRCDIR}/G3/G3_summary \
+                         ${SRCDIR}/G4/G4_summary \
+                         ${SRCDIR}/G5/G5_summary \
+              --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta' \
+                  >> _JOBNAME.log 2>> _JOBNAME.merr

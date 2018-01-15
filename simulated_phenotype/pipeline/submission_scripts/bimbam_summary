@@ -1,0 +1,14 @@
+#!/bin/bash
+
+    # Run BIMBAM summary stat =========================================================
+    BIMBAM_SUMMARY_JOBNAME="bimbam_${SIM}_${RANDSTRING}"
+    for STUDY in ${STUDYNAMES[@]}; do
+        JOBNAME="${BIMBAM_SUMMARY_JOBNAME}_${STUDY}"
+        sed "s|_JOBNAME|${JOBNAME}|g;
+             s|_SIMDIR_|${THIS_SIMDIR}|g;
+             s|_BIMBAM_|${BIMBAM}|g;
+             s|_LOCIDIR|${DOSAGEDIR}|g;
+             s|_GSTUDY_|${STUDY}|g;" ${MASTER_JOBSUBDIR}/bimbam_summary.bsub > ${JOBNAME}.bsub
+        bsub -w "done(${PHENO_JOBNAME})" < ${JOBNAME}.bsub
+    done
+    # =================================================================================

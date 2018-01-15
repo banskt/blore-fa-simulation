@@ -1,0 +1,46 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+NC=_NCAUSAL
+
+CAVIARBF="${HOME}/packages/CAVIARBF/Wenan-caviarbf-2b133e454391/caviarbf"
+MODEL_SEARCH="${HOME}/packages/CAVIARBF/Wenan-caviarbf-2b133e454391/model_search"
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/caviarbf/c${NC}_weighted"
+METADIR="${SIMDIR}/snptest/meta"
+LDDIR="${BASEDIR}/ldmap/weighted"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+for file in ${METADIR}/Locus.[0-9]*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+    LDFILE="${FBASE}.LD"
+    tail -n +2 $file > tmp.dat
+    while read p; do
+        RSID=`echo $p | awk '{print $2}'`
+        ZSCORE=`echo $p | awk '{m=$8/$9; print m}'`
+        echo $RSID $ZSCORE >> ${LOCUSFILE}
+    done < tmp.dat
+    rm -rf tmp.dat
+    cp ${LDDIR}/${LDFILE} .
+    BFFILE="${FBASE}.bf"
+    OUTFILE="${FBASE}.prior0"
+    NSNPS=`wc -l ${LOCUSFILE} | cut -d' ' -f1`
+    $CAVIARBF -z $LOCUSFILE -r $LDFILE -t 0 -a 0.1281429 -n 13082 -c ${NC} -o $BFFILE
+    $MODEL_SEARCH -i $BFFILE -m $NSNPS -p 0 -o $OUTFILE
+    rm -rf ${LDFILE}
+done
+cd ${CURDIR}

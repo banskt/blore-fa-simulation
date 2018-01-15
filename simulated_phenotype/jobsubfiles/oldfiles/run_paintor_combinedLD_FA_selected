@@ -1,0 +1,40 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+
+PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/paintor/combined_LD_FA"
+ANNDIR="${BASEDIR}/functional_annotations"
+FCORR="func_annot_corr.dat"
+FNAMES="functional_annotation_names.dat"
+SELFA="selected_annotation.txt"
+INPUTDIR="input_files"
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+
+SELECTANN="${BASEDIR}/scripts/select_paintor_annotations.py"
+source $HOME/miniconda3/envs/py35/bin/activate py35
+
+python ${SELECTANN} --FDir ${ANNDIR} \
+                    --FCorr ${FCORR} \
+                    --FNames ${FNAMES} \
+                    --BFDir ${OUTDIR}/output \
+                    --out ${SELFA} \
+                    --fmax 5 --corrmax 0.3
+
+FA_NAMES=`cat ${OUTDIR}/output/${SELFA} | awk '{printf "%s,", $1}' | sed 's/,$/\n/'`
+mkdir output_fa
+$PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out output_fa/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${FA_NAMES} -Gname Enrich.Final -Lname BF.Final
+
+#rm -rf ${INPUTDIR}/*.LD
+cd ${CURDIR}

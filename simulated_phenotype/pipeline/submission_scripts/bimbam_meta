@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+    # Run BIMBAM meta-analysis ========================================================
+    BIMBAM_META_JOBNAME="bimbam_meta_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${BIMBAM_META_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
+         s|_LOCUSN_|${LOCUSNAMES}|g;
+         s|_BIMBAM_|${BIMBAM}|g;" ${MASTER_JOBSUBDIR}/bimbam_meta.bsub > ${BIMBAM_META_JOBNAME}.bsub
+    bsub -w "done(${BIMBAM_SUMMARY_JOBNAME}*)" < ${BIMBAM_META_JOBNAME}.bsub
+    # =================================================================================

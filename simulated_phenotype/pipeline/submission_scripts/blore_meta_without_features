@@ -1,0 +1,11 @@
+#!/bin/bash
+
+    # Run B-LORE meta-analysis ========================================================
+    BLORE_META_JOBNAME="blore_meta_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${BLORE_META_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_NCAUSAL|${NCAUSAL}|g;
+         s|_FEATDIR|${ANNOTDIR}|g;
+         s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
+         s|_B_LORE_|${BLORE}|g;" ${MASTER_JOBSUBDIR}/blore_without_features.bsub > ${BLORE_META_JOBNAME}.bsub
+    bsub -w "done(${BLORE_SUMMARY_JOBNAME}*)" < ${BLORE_META_JOBNAME}.bsub

@@ -1,0 +1,15 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMDIR=sim001
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SRCDIR="${BASEDIR}/simulations/${SIMDIR}/snptest"
+SCRIPT="${BASEDIR}/scripts/genomic_inflation_factor.py"
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+python $SCRIPT -b $SRCDIR

@@ -1,0 +1,59 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+
+PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/paintor/combined_LD_FA"
+METADIR="${SIMDIR}/snptest/meta"
+LDDIR="${BASEDIR}/ldmap/weighted"
+ANNDIR="${BASEDIR}/functional_annotations"
+
+if [ -d ${OUTDIR} ]; then
+    rm -rf ${OUTDIR}
+fi
+
+mkdir -p ${OUTDIR}
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+
+INPUTDIR="input_files"
+FA_NAMES=`cat ${ANNDIR}/functional_annotation_names.dat`
+mkdir ${INPUTDIR} output
+for file in ${METADIR}/Locus.[0-9]*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    # z-score file
+    # Save time by copying from the previous run
+    cp ../combined_LD/${INPUTDIR}/${FBASE} ${INPUTDIR}/
+
+    # input file
+    echo ${FBASE} >> ${INPUTDIR}/input.files
+
+    # annotation file
+    cp ${ANNDIR}/${FBASE}.annotations ${INPUTDIR}/
+
+    # ld files
+    LDFILE="${FBASE}.LD"
+    cp ${LDDIR}/${LDFILE} ${INPUTDIR}/${LDFILE}
+
+    echo "${FBASE} done."
+done
+
+$PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out output/ -Zhead Zscore.meta -LDname LD -enumerate 2 -Gname Enrich.Base -Lname BF.Base
+for func in ${FA_NAMES}; do
+    $PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out output/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${func} -Gname Enrich.${func} -Lname BF.${func}
+done
+#rm -rf ${INPUTDIR}/*.LD
+
+cd ${CURDIR}

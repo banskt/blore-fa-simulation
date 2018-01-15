@@ -1,0 +1,32 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+STUDY=_GSTUDY_
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
+
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample.bimbam"
+OUTDIR="${SIMDIR}/bimbam/${STUDY}"
+GENO="${BASEDIR}/loci_dosages/${STUDY}"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+for i in {1..200}; do
+    INDEX=`echo $i | awk '{printf "%03d", $1}'`
+    FBASE="Locus.${INDEX}"
+    INFILE="${GENO}/${FBASE}.matgen"
+    OUTFILE="${FBASE}.ssd.txt"
+    $BIMBAM -gmode 1 -g $INFILE -p $SAMPLEFILE -o $FBASE -psd $OUTFILE
+done
+cd ${CURDIR}

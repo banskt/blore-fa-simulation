@@ -1,0 +1,76 @@
+#!/bin/sh
+#BSUB -J sim001
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o out.%J
+#BSUB -e err.%J
+#BSUB -n 1
+
+SIMNAME=sim001
+
+PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+LOCUSFOLDER="${BASEDIR}/loci_dosages/select_200_clean_SNPs"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/paintor/individual_LD"
+SNPTESTDIR="${SIMDIR}/snptest"
+METADIR="${SIMDIR}/snptest/meta"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+
+INPUTDIR="input_files"
+mkdir ${INPUTDIR} output
+
+# Copy the LD files
+LDDIR="${BASEDIR}/ldmap/individual"
+cp ${LDDIR}/*.LD.G* ${INPUTDIR}/
+
+for file in ${METADIR}/Locus.[0-9]*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    #Create z-score file
+    echo "CHR POS SNP_ID Zscore.G1 Zscore.G2 Zscore.G3 Zscore.G4 Zscore.G4 Zscore.G5" > ${INPUTDIR}/${LOCUSFILE}
+    CHR=`head -n 1 ${LOCUSFOLDER}/${FBASE}.info | awk '{print $2}'`
+    tail -n +2 ${file} > tmp.dat
+    while read p; do
+        BPOS=`echo $p | awk '{print $3}'`
+        RSID=`echo $p | awk '{print $2}'`
+        ZSTR=""
+        for study in G1 G2 G3 G4 G5; do 
+            STUDYOUT="${SNPTESTDIR}/${study}/${FBASE}.out"
+            STRING=`grep "${RSID} " ${STUDYOUT}`
+            if [ -z "${STRING}" ]
+            then 
+                ZSCORE="NA" 
+            else
+                ZSCORE=`echo ${STRING} | awk '{m=$44/$45; print m}'`
+            fi
+            ZSTR+=" ${ZSCORE}"
+        done
+        ZCOM=`echo $p | awk '{m=$8/$9; print m}'`
+        echo ${CHR} ${BPOS} ${RSID} ${ZSTR} >> ${INPUTDIR}/${LOCUSFILE}
+    done < tmp.dat
+    NSNPS=`wc -l tmp.dat | cut -d' ' -f1`
+    rm -rf tmp.dat
+
+    # create input file
+    echo ${FBASE} >> ${INPUTDIR}/input.files
+
+    # annotation files
+    ANNFILE="${INPUTDIR}/${FBASE}.annotations"
+    echo "Coding" > $ANNFILE
+    for (( j=1; j<=${NSNPS}; j++ )); do echo 1 >> $ANNFILE; done
+
+    echo "${FBASE} done."
+done
+
+$PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out output/ -Zhead Zscore.G1, Zscore.G2, Zscore.G3, Zscore.G4, Zscore.G5 -LDname LD.G1, LD.G2, LD.G3, LD.G4, LD.G5 -enumerate 2
+rm -rf ${INPUTDIR}/*.LD.G*
+cd ${CURDIR}

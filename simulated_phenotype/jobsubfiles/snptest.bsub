@@ -1,0 +1,28 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+SIMDIR=_SIMDIR_
+STUDY=_GSTUDY_
+SNPTEST=_SNPTEST
+LOCIDIR=_LOCIDIR
+
+SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
+OUTDIR="${SIMDIR}/snptest/${STUDY}"
+GENODIR="${LOCIDIR}/${STUDY}"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+for file in `ls ${GENODIR}/*.gen`; do
+    INFILE="$file"
+    OUTFILENAME="`basename ${INFILE} .gen`.out"
+    OUTFILE="${OUTDIR}/${OUTFILENAME}"
+    $SNPTEST -data $INFILE $SAMPLEFILE -o $OUTFILE -frequentist 1 -pheno pheno -method score
+done

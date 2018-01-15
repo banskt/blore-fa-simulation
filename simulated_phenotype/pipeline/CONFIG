@@ -1,0 +1,36 @@
+#!/bin/bash
+
+CURDIR=`pwd`
+
+# data directories
+BASEDIR="/scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/meta_nold"
+DOSAGEDIR="${BASEDIR}/loci_dosages"
+ANNOTDIR="${BASEDIR}/functional_annotations"
+LDMAPDIR="${BASEDIR}/ldmap"
+SIMDIR="${BASEDIR}/simulations"
+STUDYNAMES=('G1' 'G2' 'G3' 'G4' 'G5')
+STUDYSAMPLES=('2139' '2420' '2472' '2084' '3967')
+LOCUSNAMES="${BASEDIR}/LOCUSNAMES"
+
+# Pipeline directories
+MASTER_JOBSUBDIR="${CURDIR}/../jobsubfiles"
+JOBSUBDIR="${CURDIR}/jobsubs"
+SCRIPTDIR="${CURDIR}/../scripts"
+
+# external programs required for the pipeline
+LDSTORE="${HOME}/packages/ldstore/ldstore_v1.1_x86_64/ldstore"
+SNPTEST="${HOME}/packages/SNPTEST/snptest_v2.5.4-beta3_linux_x86_64_dynamic/snptest_v2.5.4-beta3"
+META="${HOME}/packages/META/meta"
+BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
+BLORE="${HOME}/fine-mapping-SNPs/codebase/b-lore/bin/blore"
+
+# other scripts used in the pipeline
+CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
+GENINF="${SCRIPTDIR}/genomic_inflation_factor.py"
+WEIGHTED_LD="${SCRIPTDIR}/weighted_ld.py"
+
+START=3
+END=50
+NCAUSAL=2
+HERITABILITY=0.25
+C_PROP=0.01

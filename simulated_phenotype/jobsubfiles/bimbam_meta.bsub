@@ -1,0 +1,31 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+SIMDIR=_SIMDIR_
+LOCUSNAMES=_LOCUSN_
+STUDYNAMES=_STUDYN_
+BIMBAM=_BIMBAM_
+
+OUTDIR="${SIMDIR}/bimbam/meta"
+CWD=`pwd`
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+cd ${OUTDIR}
+while read LOCUSPREFIX; do
+    FSSD="${LOCUSPREFIX}.ssd.txt"
+    COHORTFILES=""
+    for STUDY in ${STUDYNAMES}; do
+        COHORTFILES+="-ssd ${SIMDIR}/bimbam/${STUDY}/output/${FSSD} "
+    done
+    ${BIMBAM} ${COHORTFILES} -cc -a 0.1 -l 2 -o ${LOCUSPREFIX}.meta
+done < ${LOCUSNAMES}
+cd ${CWD}

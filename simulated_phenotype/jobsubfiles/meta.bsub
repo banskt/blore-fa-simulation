@@ -1,0 +1,43 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+SIMDIR=_SIMDIR_
+STUDYNAMES=_STUDYN_
+SAMPLES=_SAMPLES
+LOCUSNAMES=_LOCUSN_
+SCRIPT=_SCRIPT_
+META=__META__
+
+SNPTESTDIR="${SIMDIR}/snptest"
+GFILE="${SNPTESTDIR}/genomic_inflation_factor.txt"
+
+source ${HOME}/miniconda3/envs/py35/bin/activate py35
+python ${SCRIPT} -ds ${SNPTESTDIR} -fl ${LOCUSNAMES} -st ${STUDYNAMES} -stn ${SAMPLES} -o ${GFILE}
+
+CWD=`pwd`
+
+OUTDIR="${SIMDIR}/snptest/meta"
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+cd ${OUTDIR}
+
+LAMBDAS=`cat ${GFILE} | awk '{print $2}'`
+
+while read LOCUSPREFIX; do 
+    INFILE="${LOCUSPREFIX}.out"
+    OUTFILE="${LOCUSPREFIX}.meta.out"
+    COHORTFILES=""
+    for STUDY in ${STUDYNAMES}; do
+        COHORTFILES+="../${STUDY}/${INFILE} "
+    done
+    ${META} --snptest --method 1 --cohort ${COHORTFILES} --lambda ${LAMBDAS} --output ${OUTFILE}
+done < ${LOCUSNAMES}
+
+cd ${CWD}

@@ -1,0 +1,65 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+
+module load R/3.4.1
+
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+OUTDIR="${SIMDIR}/metaCCA"
+SNPTESTDIR="${SIMDIR}/snptest"
+METADIR="${SIMDIR}/snptest/meta"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+
+INPUTDIR="inputs"
+if [ -d ${INPUTDIR} ]; then
+    rm -rf ${INPUTDIR}
+fi
+mkdir ${INPUTDIR}
+
+# Copy the LD files
+LDDIR="${BASEDIR}/ldmap"
+cp ${LDDIR}/individual/Locus.*.LD.G* ${INPUTDIR}/
+cp ${LDDIR}/combined/Locus.*.LD.rsid ${INPUTDIR}/
+
+for file in ${METADIR}/Locus.[0-9]*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    # Create files for each individual study
+    for STUDY in G1 G2 G3 G4 G5; do
+        THISFILE="${INPUTDIR}/${LOCUSFILE}.S_XY_${STUDY}.txt"
+        echo 'SNP_id allele_0 allele_1 trait1_b trait1_se' > ${THISFILE}
+        sed '/^#/d;/^alternate/d' ${SNPTESTDIR}/${STUDY}/${LOCUSFILE}.out | awk '{print $2, $5, $6, $44, $45}' >> ${THISFILE}
+    done
+
+    # Create file for meta result
+    cat ${METADIR}/${LOCUSFILE}.meta.out | awk '{print $2, $4, $5, $6}' >> ${INPUTDIR}/${LOCUSFILE}.metares
+
+done
+
+#cp ${BASEDIR}/scripts/run_metaCCA_sim_all.R .
+#cp ${BASEDIR}/scripts/run_metaCCA_sim_30.R .
+cp ${BASEDIR}/scripts/run_metaCCA_sim_10.R .
+rm -rf res_all.txt
+rm -rf res_30.txt
+rm -rf res_10.txt
+#Rscript run_metaCCA_sim_all.R >> res_all.txt
+#Rscript run_metaCCA_sim_30.R >> res_30.txt
+Rscript run_metaCCA_sim_10.R >> res_10.txt
+
+rm -rf ${INPUTDIR}/*.LD.G*
+rm -rf ${INPUTDIR}/*.LD.rsid
+cd ${CURDIR}

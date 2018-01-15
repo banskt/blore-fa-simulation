@@ -1,0 +1,20 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+SIMDIR=_SIMDIR_
+SCRIPT=_SCRIPT_
+LOCUSNAMES=_LOCUSN_
+STUDYNAMES=_STUDYN_
+SAMPLES=_SAMPLES
+
+SNPTESTDIR="${SIMDIR}/snptest"
+OUTFILENAME="${SNPTESTDIR}/genomic_inflation_factor.txt"
+
+source ${HOME}/miniconda3/envs/py35/bin/activate py35
+python ${SCRIPT} -ds ${SNPTESTDIR} -fl ${LOCUSNAMES} -st ${STUDYNAMES} -stn ${SAMPLES} -o ${OUTFILENAME}

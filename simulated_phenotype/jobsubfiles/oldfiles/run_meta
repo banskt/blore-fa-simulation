@@ -1,0 +1,42 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+
+SIMNAME=_SIMDIR_
+BASEDIR="${HOME}/fine-mapping-SNPs/artificial_phenotypes/metaprod"
+META="${HOME}/packages/META/meta"
+
+SIMDIR="${BASEDIR}/simulations/${SIMNAME}"
+SRCDIR="${SIMDIR}/snptest"
+OUTDIR="${SIMDIR}/snptest/meta"
+SCRIPT="${BASEDIR}/scripts/genomic_inflation_factor.py"
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+python $SCRIPT -b $SRCDIR
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CURDIR=`pwd`
+cd ${OUTDIR}
+GFILE="${SRCDIR}/genomic_inflation_factor.txt"
+LAMBDAS=`cat ${GFILE} | awk '{print $2}'`
+
+for i in {1..200}; do
+    INDEX=`echo $i | awk '{printf "%03d", $1}'`
+    INFILE="Locus.${INDEX}.out"
+    OUTFILE="Locus.${INDEX}.meta.out"
+    $META --snptest --method 1 --cohort ../G1/${INFILE}\
+                                        ../G2/${INFILE}\
+                                        ../G3/${INFILE}\
+                                        ../G4/${INFILE}\
+                                        ../G5/${INFILE}\
+                                  --lambda ${LAMBDAS}\
+                                  --output ${OUTFILE}
+done
+cd ${CURDIR}
