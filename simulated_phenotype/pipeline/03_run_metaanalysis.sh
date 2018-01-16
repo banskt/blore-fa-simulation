@@ -24,7 +24,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     
 
     cd ${THIS_JOBSUBDIR}
-    rm -rf paintor_FA*
+    rm -rf finemap_* caviarbf_*
 
     #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
