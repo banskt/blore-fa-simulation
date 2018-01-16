@@ -42,12 +42,12 @@ for file in ${METADIR}/*.meta.out; do
     rm -rf tmp.dat
 
     LDFILE="${FBASE}.LD"
-    cp ${WT_LDDIR}/${LDFILE} ${OUTDIR}/${LDFILE}
+    cp ${WT_LDDIR}/${LDFILE} ${OUTDIR}/${FBASE}.ld
 
     SNPFILE="${FBASE}.snp"
     CONFIGFILE="${FBASE}.config"
 
-    echo "${LOCUSFILE};${LDFILE};${SNPFILE};${CONFIGFILE};${NTOT}" >> data
+    echo "${LOCUSFILE};${FBASE}.ld;${SNPFILE};${CONFIGFILE};${NTOT}" >> data
 done
 ${FINEMAP} --sss --in-files data --n-causal-max ${NC}
 rm -rf *.LD

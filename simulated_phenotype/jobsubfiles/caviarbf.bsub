@@ -18,6 +18,10 @@ OUTDIR="${SIMDIR}/caviarbf/c${NC}_weighted"
 METADIR="${SIMDIR}/snptest/meta"
 WT_LDDIR="${LDDIR}/weighted"
 
+if [ -d ${OUTDIR} ]; then
+    rm -rf ${OUTDIR}
+fi
+
 if [ ! -d ${OUTDIR} ]; then
     mkdir -p ${OUTDIR}
 fi
@@ -45,8 +49,7 @@ for file in ${METADIR}/*.meta.out; do
     BFFILE="${FBASE}.bf"
     OUTFILE="${FBASE}.prior0"
     NSNPS=`wc -l ${LOCUSFILE} | cut -d' ' -f1`
-    #${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 -a 0.1281429 -n ${NTOT} -c ${NC} -o ${BFFILE}
-    ${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 --appr -n ${NTOT} -c ${NC} -o ${BFFILE}
+    ${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 -a 0.1 --appr -n ${NTOT} -c ${NC} -o ${BFFILE}
     ${MODEL_SEARCH} -i ${BFFILE} -m ${NSNPS} -p 0 -o ${OUTFILE}
     rm -rf ${LDFILE}
 done
