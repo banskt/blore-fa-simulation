@@ -12,6 +12,10 @@ STUDYNAMES=('G1' 'G2' 'G3' 'G4' 'G5')
 STUDYSAMPLES=('2139' '2420' '2472' '2084' '3967')
 LOCUSNAMES="${BASEDIR}/LOCUSNAMES"
 
+# External files
+FEATURE_CORRELATION="${ANNOTDIR}/func_annot_corr.dat"
+FEATURE_NAMES="${ANNOTDIR}/functional_annotation_names.dat"
+
 # Pipeline directories
 MASTER_JOBSUBDIR="${CURDIR}/../jobsubfiles"
 JOBSUBDIR="${CURDIR}/jobsubs"
@@ -24,14 +28,20 @@ META="${HOME}/packages/META/meta"
 BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
 BLORE="${HOME}/fine-mapping-SNPs/codebase/b-lore/bin/blore"
 PAINTOR="${HOME}/packages/PAINTOR/PAINTOR_V3.0-master/PAINTOR"
+CAVIARBF="${HOME}/packages/CAVIARBF/Wenan-caviarbf-2b133e454391/caviarbf"
+MODEL_SEARCH="${HOME}/packages/CAVIARBF/Wenan-caviarbf-2b133e454391/model_search"
 
 # other scripts used in the pipeline
 CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
 GENINF="${SCRIPTDIR}/genomic_inflation_factor.py"
 WEIGHTED_LD="${SCRIPTDIR}/weighted_ld.py"
+SELECT_FEATURES_PAINTOR="${SCRIPTDIR}/select_paintor_annotations.py"
 
 START=1
 END=50
 NCAUSAL=2
 HERITABILITY=0.25
 C_PROP=0.01
+NSAMPLE_TOT=13082
+NCAVIAR="1 2"
+NFINEMAP="2 5 10"

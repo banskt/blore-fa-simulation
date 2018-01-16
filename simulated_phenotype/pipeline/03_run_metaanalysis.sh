@@ -24,6 +24,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     
 
     cd ${THIS_JOBSUBDIR}
+    rm -rf paintor_FA*
 
     #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
@@ -35,52 +36,12 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
     #source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
     #source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
-    source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
-    #source ${SUBDIR}/paintorfa
-    #source ${SUBDIR}/caviarbf
+    #source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
+    #source ${SUBDIR}/paintor_fa  				# PAINTORFA_JOBNAME
+    source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
     #source ${SUBDIR}/finemap
     #source ${SUBDIR}/metacca
 
     cd $CURDIR
 
 done
-
-    ## # Run CAVIARBF
-    ## CAVIARBF_C1_JOBNAME="caviarbf_c1_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${CAVIARBF_C1_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|;
-    ##    10s|_NCAUSAL|1|"         ${CAVIARBF_MASTER_JOBSUB} > ${CAVIARBF_C1_JOBNAME}.bsub
-    ## bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_C1_JOBNAME}.bsub
-
-    ## CAVIARBF_C2_JOBNAME="caviarbf_c2_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${CAVIARBF_C2_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|;
-    ##    10s|_NCAUSAL|2|"         ${CAVIARBF_MASTER_JOBSUB} > ${CAVIARBF_C2_JOBNAME}.bsub
-    ## bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_C2_JOBNAME}.bsub
-
-    ## # Run metaCCA =====================================================================
-    ## METACCA_JOBNAME="metaCCA_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${METACCA_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|"   ${METACCA_MASTER_JOBSUB} > ${METACCA_JOBNAME}.bsub
-    ## bsub -w "done(${META_JOBNAME})" < ${METACCA_JOBNAME}.bsub
-
-    ## # Run FINEMAP =====================================================================
-    ## FINEMAP_JOBNAME="finemap_c${NCAUSAL}_combined_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${FINEMAP_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|;
-    ##    10s|_NCAUSAL|${NCAUSAL}|"     ${FINEMAP_MASTER_JOBSUB} > ${FINEMAP_JOBNAME}.bsub
-    ## bsub -w "done(${META_JOBNAME})" < ${FINEMAP_JOBNAME}.bsub
-
-    ## # Run PAINTOR over all annotations independently ==================================
-    ## PAINTORFA_SEARCH_JOBNAME="paintor_combinedLD_FA_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${PAINTORFA_SEARCH_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|" \
-    ##             ${PAINTORFA_SEARCHALL_MASTER_JOBSUB} > ${PAINTORFA_SEARCH_JOBNAME}.bsub
-    ## bsub -w "done(${PAINTOR_JOBNAME})" < ${PAINTORFA_SEARCH_JOBNAME}.bsub
-
-    ## # Run PAINTOR with selected annotations ===========================================
-    ## PAINTORFA_SELECT_JOBNAME="paintor_combinedLD_FA_selected_${SIM}_${RANDSTRING}"
-    ## sed "s|_JOBNAME|${PAINTORFA_SELECT_JOBNAME}|g;
-    ##     9s|_SIMDIR_|${SIMFOLDER}|" \
-    ##              ${PAINTORFA_COMBINED_MASTER_JOBSUB} > ${PAINTORFA_SELECT_JOBNAME}.bsub
-    ## bsub -w "done(${PAINTORFA_SEARCH_JOBNAME})"  < ${PAINTORFA_SELECT_JOBNAME}.bsub

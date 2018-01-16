@@ -1,0 +1,42 @@
+#!/bin/bash
+
+    # Run PAINTOR using functional annotations ========================================
+    PAINTORFA_INPUT_JOBNAME="pfa_input_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${PAINTORFA_INPUT_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_LD_DIR_|${LDMAPDIR}|g;
+         s|_FEATDIR|${ANNOTDIR}|g;
+         s|_SEL_ANN|${SELECT_FEATURES_PAINTOR}|g;
+         s|_FEATCOR|${FEATURE_CORRELATION}|g;
+         s|_FEATNAM|${FEATURE_NAMES}|g;
+         s|_PAINTOR|${PAINTOR}|g;" ${MASTER_JOBSUBDIR}/paintor_fa_input.bsub > ${PAINTORFA_INPUT_JOBNAME}.bsub
+    #bsub -w "done(${PAINTOR_JOBNAME})" < ${PAINTORFA_JOBNAME}.bsub
+    bsub < ${PAINTORFA_INPUT_JOBNAME}.bsub
+
+    PAINTORFA_SEARCH_JOBNAME_PREFIX="pfa_${SIM}_${RANDSTRING}"
+    for FEAT_NAME in `cat ${FEATURE_NAMES}`; do
+        PAINTORFA_SEARCH_JOBNAME="${PAINTORFA_SEARCH_JOBNAME_PREFIX}_${FEAT_NAME}"
+        sed "s|_JOBNAME|${PAINTORFA_SEARCH_JOBNAME}|g;
+             s|_SIMDIR_|${THIS_SIMDIR}|g;
+             s|_LD_DIR_|${LDMAPDIR}|g;
+             s|_FEATDIR|${ANNOTDIR}|g;
+             s|_SEL_ANN|${SELECT_FEATURES_PAINTOR}|g;
+             s|_FEATCOR|${FEATURE_CORRELATION}|g;
+             s|_FEATNAM|${FEAT_NAME}|g;
+             s|_PAINTOR|${PAINTOR}|g;" ${MASTER_JOBSUBDIR}/paintor_fa_search.bsub > ${PAINTORFA_SEARCH_JOBNAME}.bsub
+        bsub -w "done(${PAINTORFA_INPUT_JOBNAME})" < ${PAINTORFA_SEARCH_JOBNAME}.bsub
+    done
+
+
+    PAINTORFA_JOBNAME="paintor_FA_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${PAINTORFA_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_LD_DIR_|${LDMAPDIR}|g;
+         s|_FEATDIR|${ANNOTDIR}|g;
+         s|_SEL_ANN|${SELECT_FEATURES_PAINTOR}|g;
+         s|_FEATCOR|${FEATURE_CORRELATION}|g;
+         s|_FEATFIL|${FEATURE_NAMES}|g;
+         s|_PAINTOR|${PAINTOR}|g;" ${MASTER_JOBSUBDIR}/paintor_fa_select.bsub > ${PAINTORFA_JOBNAME}.bsub
+    bsub -w "done(${PAINTORFA_SEARCH_JOBNAME_PREFIX}*)" < ${PAINTORFA_JOBNAME}.bsub
+
+    # =================================================================================

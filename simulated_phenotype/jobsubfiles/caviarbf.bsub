@@ -1,0 +1,54 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+#BSUB -R scratch
+
+SIMDIR=_SIMDIR_
+CAVIARBF=_CVIARBF
+MODEL_SEARCH=_MODSRCH
+LDDIR=_LD_DIR_
+NTOT=_NSAMTOT
+NC=_NCAUSAL
+
+OUTDIR="${SIMDIR}/caviarbf/c${NC}_weighted"
+METADIR="${SIMDIR}/snptest/meta"
+WT_LDDIR="${LDDIR}/weighted"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CWD=`pwd`
+cd ${OUTDIR}
+
+for file in ${METADIR}/*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    # Create z-score file
+    tail -n +2 $file > tmp.dat
+    while read p; do
+        RSID=`echo $p | awk '{print $2}'`
+        ZSCORE=`echo $p | awk '{m=$8/$9; print m}'`
+        echo $RSID $ZSCORE >> ${LOCUSFILE}
+    done < tmp.dat
+    rm -rf tmp.dat
+
+    # ld files
+    LDFILE="${FBASE}.LD"
+    cp ${WT_LDDIR}/${LDFILE} ${OUTDIR}/
+
+    BFFILE="${FBASE}.bf"
+    OUTFILE="${FBASE}.prior0"
+    NSNPS=`wc -l ${LOCUSFILE} | cut -d' ' -f1`
+    #${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 -a 0.1281429 -n ${NTOT} -c ${NC} -o ${BFFILE}
+    ${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 --appr -n ${NTOT} -c ${NC} -o ${BFFILE}
+    ${MODEL_SEARCH} -i ${BFFILE} -m ${NSNPS} -p 0 -o ${OUTFILE}
+    rm -rf ${LDFILE}
+done
+
+cd ${CWD}

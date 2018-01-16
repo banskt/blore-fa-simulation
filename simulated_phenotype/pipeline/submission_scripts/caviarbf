@@ -1,0 +1,16 @@
+#!/bin/bash
+
+    for NC in ${NCAVIAR}; do
+        # Run CAVIARBF ====================================================================
+        CAVIARBF_JOBNAME="caviarbf_c${NC}_${SIM}_${RANDSTRING}"
+        sed "s|_JOBNAME|${CAVIARBF_JOBNAME}|g;
+             s|_SIMDIR_|${THIS_SIMDIR}|g;
+             s|_LD_DIR_|${LDMAPDIR}|g;
+             s|_NSAMTOT|${NSAMPLE_TOT}|g;
+             s|_NCAUSAL|${NC}|g;
+             s|_CVIARBF|${CAVIARBF}|g;
+             s|_MODSRCH|${MODEL_SEARCH}|g;" ${MASTER_JOBSUBDIR}/caviarbf.bsub > ${CAVIARBF_JOBNAME}.bsub
+        #bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_JOBNAME}.bsub
+        bsub < ${CAVIARBF_JOBNAME}.bsub
+        # =================================================================================
+    done

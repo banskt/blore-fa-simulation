@@ -1,6 +1,6 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi-short
+#BSUB -q mpi
 #BSUB -W 2:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
@@ -9,49 +9,35 @@
 
 SIMDIR=_SIMDIR_
 PAINTOR=_PAINTOR
-LDDIR=_LD_DIR_
+#LDDIR=_LD_DIR_
+#ANNDIR=_FEATDIR
+SELECT_FEATURES_PY=_SEL_ANN
+FCORR=_FEATCOR
+FA_NAMES_FILE=_FEATFIL
+
 
 OUTDIR="${SIMDIR}/paintor/weighted_LD_FA"
 INPUTDIR="${OUTDIR}/input_files"
 OUTPUTDIR="${OUTDIR}/output"
-METADIR="${SIMDIR}/snptest/meta"
-WT_LDDIR="${LDDIR}/weighted"
-NOFA_DIR="${SIMDIR}/paintor/weighted_LD/input_files"
-FA_NAMES=`cat ${ANNDIR}/functional_annotation_names.dat`
+OUTPUTFADIR="${OUTDIR}/output_fa"
+
+#METADIR="${SIMDIR}/snptest/meta"
+#WT_LDDIR="${LDDIR}/weighted"
+#NOFA_DIR="${SIMDIR}/paintor/weighted_LD/input_files"
+SELFA_NAMES_FILE="${OUTPUTFADIR}/selected_annotation.txt"
 CWD=`pwd`
 
-if [ -d ${OUTDIR} ]; then
-    rm -rf ${OUTDIR}
-fi
-
-mkdir -p ${OUTDIR}
 cd ${OUTDIR}
-mkdir -p ${INPUTDIR} ${OUTPUTDIR}
 
-for file in ${METADIR}/*.meta.out; do
-    FBASE=`basename ${file} .meta.out`
-    LOCUSFILE=${FBASE}
+source $HOME/miniconda3/envs/py35/bin/activate py35
 
-    # z-score file
-    # Save time by copying from the previous run
-    cp ${NOFA_DIR}/${FBASE} ${INPUTDIR}/
+python ${SELECT_FEATURES_PY} --corr ${FCORR} \
+                             --names ${FA_NAMES_FILE} \
+                             --logBFdir ${OUTPUTDIR} \
+                             --out ${SELFA_NAMES_FILE} \
+                             --fmax 5 --corrmax 0.3
 
-    # input file
-    echo ${FBASE} >> ${INPUTDIR}/input.files
-
-    # annotation file
-    cp ${ANNDIR}/${FBASE}.annotations ${INPUTDIR}/
-
-    # ld files
-    LDFILE="${FBASE}.LD"
-    cp ${WT_LDDIR}/${LDFILE} ${INPUTDIR}/${LDFILE}
-
-    echo "${FBASE} done."
-done
-
-${PAINTOR} -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTDIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -Gname Enrich.Base -Lname BF.Base
-for func in ${FA_NAMES}; do
-    ${PAINTOR} -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTDIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${func} -Gname Enrich.${func} -Lname BF.${func}
-done
+FA_NAMES=`cat ${SELFA_NAMES_FILE} | awk '{printf "%s,", $1}' | sed 's/,$/\n/'`
+$PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTFADIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${FA_NAMES} -Gname Enrich.Final -Lname BF.Final
 
 cd ${CWD}
