@@ -1,0 +1,57 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+#BSUB -R scratch
+
+SIMDIR=_SIMDIR_
+PAINTOR=_PAINTOR
+LDDIR=_LD_DIR_
+
+OUTDIR="${SIMDIR}/paintor/weighted_LD_FA"
+INPUTDIR="${OUTDIR}/input_files"
+OUTPUTDIR="${OUTDIR}/output"
+METADIR="${SIMDIR}/snptest/meta"
+WT_LDDIR="${LDDIR}/weighted"
+NOFA_DIR="${SIMDIR}/paintor/weighted_LD/input_files"
+FA_NAMES=`cat ${ANNDIR}/functional_annotation_names.dat`
+CWD=`pwd`
+
+if [ -d ${OUTDIR} ]; then
+    rm -rf ${OUTDIR}
+fi
+
+mkdir -p ${OUTDIR}
+cd ${OUTDIR}
+mkdir -p ${INPUTDIR} ${OUTPUTDIR}
+
+for file in ${METADIR}/*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+
+    # z-score file
+    # Save time by copying from the previous run
+    cp ${NOFA_DIR}/${FBASE} ${INPUTDIR}/
+
+    # input file
+    echo ${FBASE} >> ${INPUTDIR}/input.files
+
+    # annotation file
+    cp ${ANNDIR}/${FBASE}.annotations ${INPUTDIR}/
+
+    # ld files
+    LDFILE="${FBASE}.LD"
+    cp ${WT_LDDIR}/${LDFILE} ${INPUTDIR}/${LDFILE}
+
+    echo "${FBASE} done."
+done
+
+${PAINTOR} -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTDIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -Gname Enrich.Base -Lname BF.Base
+for func in ${FA_NAMES}; do
+    ${PAINTOR} -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTDIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${func} -Gname Enrich.${func} -Lname BF.${func}
+done
+
+cd ${CWD}

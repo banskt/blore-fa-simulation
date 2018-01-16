@@ -2,7 +2,7 @@
 
 source CONFIG
 
-SUBDIR="submission_scripts"
+SUBDIR="${CURDIR}/submission_scripts"
 
 ## Do we need to create weighted LD for this simulation?
 source ${SUBDIR}/check_weighted_ld # creates RUN_WEIGHTED_LD variable and LOCIPREFIX array

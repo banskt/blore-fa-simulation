@@ -30,7 +30,7 @@ CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
 GENINF="${SCRIPTDIR}/genomic_inflation_factor.py"
 WEIGHTED_LD="${SCRIPTDIR}/weighted_ld.py"
 
-START=3
+START=1
 END=50
 NCAUSAL=2
 HERITABILITY=0.25
