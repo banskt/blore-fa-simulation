@@ -1,0 +1,15 @@
+#!/bin/bash
+
+    for NC in ${NFINEMAP}; do
+        # Run FINEMAP =====================================================================
+        FINEMAP_JOBNAME="finemap_c${NC}_${SIM}_${RANDSTRING}"
+        sed "s|_JOBNAME|${FINEMAP_JOBNAME}|g;
+             s|_SIMDIR_|${THIS_SIMDIR}|g;
+             s|_LD_DIR_|${LDMAPDIR}|g;
+             s|_NSAMTOT|${NSAMPLE_TOT}|g;
+             s|_NCAUSAL|${NC}|g;
+             s|_FINEMAP|${FINEMAP}|g;" ${MASTER_JOBSUBDIR}/finemap.bsub > ${FINEMAP_JOBNAME}.bsub
+        #bsub -w "done(${META_JOBNAME})" < ${FINEMAP_JOBNAME}.bsub
+        bsub < ${FINEMAP_JOBNAME}.bsub
+        # =================================================================================
+    done

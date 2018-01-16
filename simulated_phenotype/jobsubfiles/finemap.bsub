@@ -1,0 +1,55 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+#BSUB -R scratch
+
+SIMDIR=_SIMDIR_
+NC=_NCAUSAL
+FINEMAP=_FINEMAP
+LDDIR=_LD_DIR_
+NTOT=_NSAMTOT
+
+OUTDIR="${SIMDIR}/finemap/c${NC}"
+METADIR="${SIMDIR}/snptest/meta"
+WT_LDDIR="${LDDIR}/weighted"
+
+if [ -d ${OUTDIR} ]; then
+    rm -rf ${OUTDIR}
+fi
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CWD=`pwd`
+cd ${OUTDIR}
+
+echo "z;ld;snp;config;n-ind" > data
+for file in ${METADIR}/*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}.z
+
+    tail -n +2 $file > tmp.dat
+    while read p; do
+        RSID=`echo $p | awk '{print $2}'`
+        ZSCORE=`echo $p | awk '{m=$8/$9; print m}'`
+        echo $RSID $ZSCORE >> ${LOCUSFILE}
+    done < tmp.dat
+    rm -rf tmp.dat
+
+    LDFILE="${FBASE}.LD"
+    cp ${WT_LDDIR}/${LDFILE} ${OUTDIR}/${LDFILE}
+
+    SNPFILE="${FBASE}.snp"
+    CONFIGFILE="${FBASE}.config"
+
+    echo "${LOCUSFILE};${LDFILE};${SNPFILE};${CONFIGFILE};${NTOT}" >> data
+done
+${FINEMAP} --sss --in-files data --n-causal-max ${NC}
+rm -rf *.LD
+
+cd ${CWD}

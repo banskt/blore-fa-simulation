@@ -39,7 +39,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
     #source ${SUBDIR}/paintor_fa  				# PAINTORFA_JOBNAME
     source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
-    #source ${SUBDIR}/finemap
+    source ${SUBDIR}/finemap
     #source ${SUBDIR}/metacca
 
     cd $CURDIR
