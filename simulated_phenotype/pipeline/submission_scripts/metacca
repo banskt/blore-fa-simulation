@@ -1,0 +1,13 @@
+#!/bin/bash
+
+    # Run METACCA =====================================================================
+    METACCA_JOBNAME="metacca_${SIM}_${RANDSTRING}"
+    sed "s|_JOBNAME|${METACCA_JOBNAME}|g;
+         s|_SIMDIR_|${THIS_SIMDIR}|g;
+         s|_LD_DIR_|${LDMAPDIR}|g;
+         s|_NSAMTOT|${NSAMPLE_TOT}|g;
+         s|_NCAUSAL|${NC}|g;
+         s|_METACCA|${METACCA}|g;" ${MASTER_JOBSUBDIR}/metacca.bsub > ${METACCA_JOBNAME}.bsub
+    #bsub -w "done(${META_JOBNAME})" < ${METACCA_JOBNAME}.bsub
+    bsub < ${METACCA_JOBNAME}.bsub
+    # =================================================================================

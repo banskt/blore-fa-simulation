@@ -24,7 +24,6 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     
 
     cd ${THIS_JOBSUBDIR}
-    rm -rf finemap_* caviarbf_*
 
     #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
@@ -38,9 +37,9 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
     #source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
     #source ${SUBDIR}/paintor_fa  				# PAINTORFA_JOBNAME
-    source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
-    source ${SUBDIR}/finemap
-    #source ${SUBDIR}/metacca
+    #source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
+    #source ${SUBDIR}/finemap
+    source ${SUBDIR}/metacca
 
     cd $CURDIR
 
