@@ -7,5 +7,8 @@
          s|_FEATDIR|${ANNOTDIR}|g;
          s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
          s|_B_LORE_|${BLORE}|g;" ${MASTER_JOBSUBDIR}/blore_with_features.bsub > ${BLORE_META_FEAT_JOBNAME}.bsub
-    bsub -w "done(${BLORE_SUMMARY_JOBNAME}*)" < ${BLORE_META_FEAT_JOBNAME}.bsub
-    # =================================================================================
+    if [[ ${CHAIN_JOBS} == "True" ]]; then
+        bsub -w "done(${BLORE_SUMMARY_JOBNAME}*)" < ${BLORE_META_FEAT_JOBNAME}.bsub
+    else
+        bsub < ${BLORE_META_FEAT_JOBNAME}.bsub
+    fi

@@ -8,5 +8,10 @@
          s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
          s|_LOCUSN_|${LOCUSNAMES}|g;
          s|_BIMBAM_|${BIMBAM}|g;" ${MASTER_JOBSUBDIR}/bimbam_meta.bsub > ${BIMBAM_META_JOBNAME}.bsub
-    bsub -w "done(${BIMBAM_SUMMARY_JOBNAME}*)" < ${BIMBAM_META_JOBNAME}.bsub
+    if [[ ${CHAIN_JOBS} == "True" ]]; then
+        bsub -w "done(${BIMBAM_SUMMARY_JOBNAME}*)" < ${BIMBAM_META_JOBNAME}.bsub
+    else
+        bsub < ${BIMBAM_META_JOBNAME}.bsub
+    fi
+
     # =================================================================================

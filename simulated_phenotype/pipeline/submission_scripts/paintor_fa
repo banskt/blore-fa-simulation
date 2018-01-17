@@ -10,8 +10,11 @@
          s|_FEATCOR|${FEATURE_CORRELATION}|g;
          s|_FEATNAM|${FEATURE_NAMES}|g;
          s|_PAINTOR|${PAINTOR}|g;" ${MASTER_JOBSUBDIR}/paintor_fa_input.bsub > ${PAINTORFA_INPUT_JOBNAME}.bsub
-    #bsub -w "done(${PAINTOR_JOBNAME})" < ${PAINTORFA_JOBNAME}.bsub
-    bsub < ${PAINTORFA_INPUT_JOBNAME}.bsub
+    if [[ ${CHAIN_JOBS} == "True" ]]; then
+        bsub -w "done(${PAINTOR_JOBNAME})" < ${PAINTORFA_INPUT_JOBNAME}.bsub
+    else
+        bsub < ${PAINTORFA_INPUT_JOBNAME}.bsub
+    fi
 
     PAINTORFA_SEARCH_JOBNAME_PREFIX="pfa_${SIM}_${RANDSTRING}"
     for FEAT_NAME in `cat ${FEATURE_NAMES}`; do

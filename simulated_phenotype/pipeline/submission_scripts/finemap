@@ -9,7 +9,10 @@
              s|_NSAMTOT|${NSAMPLE_TOT}|g;
              s|_NCAUSAL|${NC}|g;
              s|_FINEMAP|${FINEMAP}|g;" ${MASTER_JOBSUBDIR}/finemap.bsub > ${FINEMAP_JOBNAME}.bsub
-        #bsub -w "done(${META_JOBNAME})" < ${FINEMAP_JOBNAME}.bsub
-        bsub < ${FINEMAP_JOBNAME}.bsub
+        if [[ ${CHAIN_JOBS} == "True" ]]; then
+            bsub -w "done(${META_JOBNAME})" < ${FINEMAP_JOBNAME}.bsub
+        else
+            bsub < ${FINEMAP_JOBNAME}.bsub
+        fi
         # =================================================================================
     done

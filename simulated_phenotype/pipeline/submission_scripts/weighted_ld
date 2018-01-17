@@ -2,20 +2,24 @@
 
     # Create weighted LD ==============================================================
     if [[ ${RUN_WEIGHTED_LD} == "true" ]]; then
-       cd ${LD_JOBSUBDIR}
-       for LOCUSPREFIX in ${LOCIPREFIX[@]}; do
-           WGT_LD_JOBNAME="weighted_LD_${LOCUSPREFIX}"
-           sed -e "s|_JOBNAME|${WGT_LD_JOBNAME}|g;
-                   s|_WGHT_LD|${WEIGHTED_LD}|g;
-                   s|_LOCUSP_|${LOCUSPREFIX}|g;
-                   s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
-                   s|_SAMPLES|\"${STUDYSAMPLES[*]}\"|g;
-                   s|_SIMDIR_|${THIS_SIMDIR}|g;
-                   s|_LD_DIR_|${LDMAPDIR}|g" ${MASTER_JOBSUBDIR}/ldmap_weighted.bsub > ${WGT_LD_JOBNAME}.bsub
-           echo ${LOCUSPREFIX}
-           bsub -w "done(${META_JOBNAME})" < ${LD_JOBSUBDIR}/${WGT_LD_JOBNAME}.bsub
-       done
-       RUN_WEIGHTED_LD="false"
-       cd ${THIS_JOBSUBDIR}
+        cd ${LD_JOBSUBDIR}
+        for LOCUSPREFIX in ${LOCIPREFIX[@]}; do
+            WGT_LD_JOBNAME="weighted_LD_${LOCUSPREFIX}"
+            sed -e "s|_JOBNAME|${WGT_LD_JOBNAME}|g;
+                    s|_WGHT_LD|${WEIGHTED_LD}|g;
+                    s|_LOCUSP_|${LOCUSPREFIX}|g;
+                    s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
+                    s|_SAMPLES|\"${STUDYSAMPLES[*]}\"|g;
+                    s|_SIMDIR_|${THIS_SIMDIR}|g;
+                    s|_LD_DIR_|${LDMAPDIR}|g" ${MASTER_JOBSUBDIR}/ldmap_weighted.bsub > ${WGT_LD_JOBNAME}.bsub
+            echo ${LOCUSPREFIX}
+            if [[ ${CHAIN_JOBS} == "True" ]]; then
+                bsub -w "done(${META_JOBNAME})" < ${WGT_LD_JOBNAME}.bsub
+            else
+                bsub < ${WGT_LD_JOBNAME}.bsub
+            fi
+        done
+        RUN_WEIGHTED_LD="false"
+        cd ${THIS_JOBSUBDIR}
     fi
     # =================================================================================

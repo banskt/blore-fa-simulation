@@ -244,8 +244,6 @@ def select_causal_loci(nloci, nselect, featurelist, betadir, nfeat, nchoose, cfr
 
 
 opts = parse_args()
-#studies = ['G1', 'G2', 'G3', 'G4', 'G5']
-#samples = [2139, 2420, 2472, 2084, 3967]
 studies = opts.studies
 samples = opts.samples
 
@@ -306,25 +304,28 @@ print ("Picked %d causal SNPs with maximum %d SNPs in single locus" % (ncausal, 
 #betasq = np.random.chisquare(1, size=ncausal)
 #betasq = np.square(beta)
 #betasq = np.ones(ncausal)
-#beta = np.random.standard_t(1, size = ncausal)
 # Normalize
 #betasq /= np.sum(betasq) / opts.sigma_herited_sq
 #beta = np.sqrt(betasq)
 
-
-# Generate beta from bimodal distribution
-mean1 = 0.5
-mean2 = -0.5
-mvar = 0.2
-beta = np.zeros(ncausal)
-for i in range(ncausal):
-    mrandom = np.random.uniform()
-    if mrandom <= 0.5:
-        beta[i] = np.random.normal(mean1, mvar)
-    else:
-        beta[i] = np.random.normal(mean2, mvar)
-# now scale it to obtain input heritability
+# Generate beta from Student's T-distribution
+beta = np.random.standard_t(1, size = ncausal)
 beta *= np.sqrt( opts.sigma_herited_sq / np.sum(np.square(beta)) )
+
+
+## Generate beta from bimodal distribution
+#mean1 = 0.5
+#mean2 = -0.5
+#mvar = 0.2
+#beta = np.zeros(ncausal)
+#for i in range(ncausal):
+#    mrandom = np.random.uniform()
+#    if mrandom <= 0.5:
+#        beta[i] = np.random.normal(mean1, mvar)
+#    else:
+#        beta[i] = np.random.normal(mean2, mvar)
+## now scale it to obtain input heritability
+#beta *= np.sqrt( opts.sigma_herited_sq / np.sum(np.square(beta)) )
 
 # Simulate phenotype for each study
 for i, study in enumerate(studies):

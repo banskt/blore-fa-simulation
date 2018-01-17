@@ -10,7 +10,10 @@
              s|_NCAUSAL|${NC}|g;
              s|_CVIARBF|${CAVIARBF}|g;
              s|_MODSRCH|${MODEL_SEARCH}|g;" ${MASTER_JOBSUBDIR}/caviarbf.bsub > ${CAVIARBF_JOBNAME}.bsub
-        #bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_JOBNAME}.bsub
-        bsub < ${CAVIARBF_JOBNAME}.bsub
+        if [[ ${CHAIN_JOBS} == "True" ]]; then
+            bsub -w "done(${META_JOBNAME})" < ${CAVIARBF_JOBNAME}.bsub
+        else
+            bsub < ${CAVIARBF_JOBNAME}.bsub
+        fi
         # =================================================================================
     done

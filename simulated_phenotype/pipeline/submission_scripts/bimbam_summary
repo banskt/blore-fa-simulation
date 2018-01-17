@@ -9,6 +9,10 @@
              s|_BIMBAM_|${BIMBAM}|g;
              s|_LOCIDIR|${DOSAGEDIR}|g;
              s|_GSTUDY_|${STUDY}|g;" ${MASTER_JOBSUBDIR}/bimbam_summary.bsub > ${JOBNAME}.bsub
-        bsub -w "done(${PHENO_JOBNAME})" < ${JOBNAME}.bsub
+        if [[ ${CHAIN_JOBS} == "True" ]]; then
+            bsub -w "done(${PHENO_JOBNAME})" < ${JOBNAME}.bsub
+        else
+            bsub < ${JOBNAME}.bsub
+        fi
     done
     # =================================================================================

@@ -40,4 +40,6 @@ python ${SELECT_FEATURES_PY} --corr ${FCORR} \
 FA_NAMES=`cat ${SELFA_NAMES_FILE} | awk '{printf "%s,", $1}' | sed 's/,$/\n/'`
 $PAINTOR -input ${INPUTDIR}/input.files -in ${INPUTDIR}/ -out ${OUTPUTFADIR}/ -Zhead Zscore.meta -LDname LD -enumerate 2 -annotations ${FA_NAMES} -Gname Enrich.Final -Lname BF.Final
 
+rm -rf ${INPUTDIR}/*.LD
+
 cd ${CWD}

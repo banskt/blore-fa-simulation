@@ -8,5 +8,9 @@
          s|_SAMPLES|\"${STUDYSAMPLES[*]}\"|g;
          s|_LOCUSN_|${LOCUSNAMES}|g;
          s|_SCRIPT_|${GENINF}|g;" ${MASTER_JOBSUBDIR}/gen_inflation.bsub > ${GENINF_JOBNAME}.bsub
-    bsub -w "done(${SNPTEST_JOBNAME}*)" < ${GENINF_JOBNAME}.bsub
+    if [[ ${CHAIN_JOBS} == "True" ]]; then
+        bsub -w "done(${SNPTEST_JOBNAME}*)" < ${GENINF_JOBNAME}.bsub
+    else
+        bsub < ${GENINF_JOBNAME}.bsub
+    fi
     # =================================================================================
