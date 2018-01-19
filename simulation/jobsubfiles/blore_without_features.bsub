@@ -1,7 +1,7 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi
-#BSUB -W 48:00
+#BSUB -q mpi-short
+#BSUB -W 2:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -n 16
@@ -16,7 +16,7 @@ FEATDIR=_FEATDIR
 STUDYNAMES=_STUDYN_
 
 
-OUTDIR="${SIMDIR}/blore/meta_without_feature/zmax${NZ}_mu0_pi0.01_sig0.01"
+OUTDIR="${SIMDIR}/blore/meta_without_feature/zmax${NZ}_muvar_pi0.01_sig0.01"
 BLORE_SUMMARY_DIR="${SIMDIR}/blore/summary_stat"
 COHORT_PREFIXES=""
 for STUDY in ${STUDYNAMES}; do
@@ -31,4 +31,4 @@ fi
 source $HOME/miniconda3/envs/py35/bin/activate py35
 
 $BLORE --meta --statinfo ${COHORT_PREFIXES} \
-              --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta' 
+              --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --muvar --prefix='blore_meta' 
