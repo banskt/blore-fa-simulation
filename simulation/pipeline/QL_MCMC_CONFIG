@@ -5,16 +5,11 @@ CURDIR=`pwd`
 # data directories
 BASEDIR="/scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL"
 DOSAGEDIR="${BASEDIR}/loci_dosages"
-ANNOTDIR="${BASEDIR}/functional_annotations"
 LDMAPDIR="${BASEDIR}/ldmap"
 SIMDIR="${BASEDIR}/simulations"
 STUDYNAMES=('G1' 'G2' 'G3' 'G4' 'G5')
 STUDYSAMPLES=('2139' '2420' '2472' '2084' '3967')
 LOCUSNAMES="${BASEDIR}/LOCUSNAMES"
-
-# External files
-FEATURE_CORRELATION="${ANNOTDIR}/func_annot_corr.dat"
-FEATURE_NAMES="${ANNOTDIR}/functional_annotation_names.dat"
 
 # Pipeline directories
 MASTER_JOBSUBDIR="${CURDIR}/../jobsubfiles"
@@ -33,8 +28,7 @@ MODEL_SEARCH="${HOME}/packages/CAVIARBF/Wenan-caviarbf-7e428645be5e/model_search
 FINEMAP="${HOME}/packages/FINEMAP/finemap_v1.1_x86_64/finemap"
 
 # other scripts used in the pipeline
-CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
-GENINF="${SCRIPTDIR}/genomic_inflation_factor.py"
+CREATEPHENO="${SCRIPTDIR}/create_phenotype.py"
 WEIGHTED_LD="${SCRIPTDIR}/weighted_ld.py"
 SELECT_FEATURES_PAINTOR="${SCRIPTDIR}/select_paintor_annotations.py"
 

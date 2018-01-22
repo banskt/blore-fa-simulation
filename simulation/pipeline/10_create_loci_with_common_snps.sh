@@ -28,6 +28,11 @@ CLOCICOM="${SCRIPTDIR}/create_loci_common_SNPs.py"
 
 if [ ! -d ${JOBSUBDIR} ]; then mkdir -p ${JOBSUBDIR}; fi
 
+for STUDY in ${STUDYNAMES[@]}; do
+    if [ ! -d ${DOSAGEDIR}/${STUDY} ]; then mkdir -p ${DOSAGEDIR}/${STUDY}; fi
+    cp ${REF_DOSAGEDIR}/${STUDY}/*.sample ${DOSAGEDIR}/${STUDY}/
+done
+
 cd ${JOBSUBDIR}
 
 for LOCUSPREFIX in ${LOCIPREFIX[@]}; do

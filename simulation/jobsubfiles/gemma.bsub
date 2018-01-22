@@ -1,0 +1,31 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+STUDY=_GSTUDY_
+SIMDIR=_SIMDIR_
+BIMBAM=_BIMBAM_
+LOCIDIR=_LOCIDIR
+
+SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample.bimbam"
+OUTDIR="${SIMDIR}/bimbam/${STUDY}"
+GENODIR="${LOCIDIR}/${STUDY}"
+
+if [ ! -d ${OUTDIR} ]; then
+    mkdir -p ${OUTDIR}
+fi
+
+CWD=`pwd`
+cd ${OUTDIR}
+for file in `ls ${GENODIR}/*.matgen`; do
+    INFILE="${file}"
+    FBASE=`basename ${INFILE} .matgen`
+    OUTFILE="${FBASE}.ssd.txt"
+    $BIMBAM -gmode 1 -g ${INFILE} -p ${SAMPLEFILE} -o ${FBASE} -psd ${OUTFILE}
+done
+cd ${CWD}

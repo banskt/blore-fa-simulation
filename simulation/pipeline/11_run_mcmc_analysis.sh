@@ -3,8 +3,8 @@
 source QL_MCMC_CONFIG
 
 SUBDIR="${CURDIR}/submission_scripts"
-CHAIN_JOBS="True"
-#CHAIN_JOBS="False"
+#CHAIN_JOBS="True"
+CHAIN_JOBS="False"
 
 ## Do we need to create weighted LD for this simulation?
 source ${SUBDIR}/check_weighted_ld # creates RUN_WEIGHTED_LD variable and LOCIPREFIX array
@@ -44,6 +44,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
     #source ${SUBDIR}/finemap
     #source ${SUBDIR}/metacca
+    source ${SUBDIR}/gemma
 
     cd $CURDIR
 

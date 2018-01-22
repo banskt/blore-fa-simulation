@@ -27,7 +27,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     cd ${THIS_JOBSUBDIR}
 
-    #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
+    #source ${SUBDIR}/create_phenotype_with_features		# PHENO_JOBNAME
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
     ### source ${SUBDIR}/gen_inflation # now included in meta
     #source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME

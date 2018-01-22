@@ -1,0 +1,30 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 8
+#BSUB -R span[hosts=1]
+#BSUB -R scratch
+#BSUB -a openmp
+
+LOCIDIR=_LOCIDIR
+SIMDIR=_SIMDIR_
+LOCUSNAMES=_LOCUSN_
+CREATEPHENO=_SCRIPT_
+STUDYNAMES=_STUDYN_
+SAMPLES=_SAMPLES
+HG2=_HGSQUR_
+CPROP=_C_PROP_
+SIM_TYPE=_SIMTYPE
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+python ${CREATEPHENO} -dl ${LOCIDIR} -ds ${SIMDIR} -fl ${LOCUSNAMES} -l 100 -p ${CPROP} -hg ${HG2} -k 0.5 -st ${STUDYNAMES} -stn ${SAMPLES} -t ${SIM_TYPE}
+
+# convert to BIMBAM format
+for STUDY in ${STUDYNAMES}; do
+    SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
+    BIMBAMFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample.bimbam"
+    tail -n +3 ${SAMPLEFILE} | awk '{print $7}' > ${BIMBAMFILE}
+done
