@@ -1,0 +1,47 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -R span[hosts=1]
+#BSUB -n 4
+#BSUB -a openmp
+
+module load openblas/dynamic/0.2.18 
+module load gcc/6.3.0
+module load gemma/0.97 ## GEMMA depends on the previous two modules
+
+SIMDIR=_SIMDIR_
+STUDYNAMES=_STUDYN_
+LOCUSPREFIX=_LOCUSP_
+LOCIDIR=_LOCIDIR
+NCAUSAL=_NCAUSAL
+GEMMA=_GEMMA__
+
+GENODIR="${LOCIDIR}/combined"
+OUTDIR="${SIMDIR}/gemma/c${NCAUSAL}"
+OUTPREFIX="${LOCUSPREFIX}"
+COMBINED_SAMPLEDIR="${SIMDIR}/samples/combined"
+COMBINED_SAMPLEFILE="${COMBINED_SAMPLEDIR}/phenotypes.sample"
+
+if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
+if [ ! -d ${COMBINED_SAMPLEDIR} ]; then mkdir -p ${COMBINED_SAMPLEDIR}; fi
+if [ -f ${COMBINED_SAMPLEFILE} ]; then rm -rf ${COMBINED_SAMPLEFILE}; fi
+
+FIRST_STUDY=`echo ${STUDYNAMES} | awk '{print $1}'`
+SAMPLEFILE="${SIMDIR}/samples/${FIRST_STUDY}/phenotypes.sample"
+head -n 2 ${SAMPLEFILE} > ${COMBINED_SAMPLEFILE}
+
+for STUDY in ${STUDYNAMES}; do
+    SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
+    tail -n +3 ${SAMPLEFILE} >> ${COMBINED_SAMPLEFILE}
+done
+BIMBAM_PHENO="${COMBINED_SAMPLEDIR}/phenotypes.sample.bimbam"
+tail -n +3 ${COMBINED_SAMPLEFILE} | awk '{print $7}' > ${BIMBAM_PHENO}
+
+BIMBAM_GENO="${GENODIR}/${LOCUSPREFIX}.matgen"
+BIMBAM_ANNOT="${GENODIR}/${LOCUSPREFIX}.matmap"
+
+${GEMMA} -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -a ${BIMBAM_ANNOT} -rmin 1 -bslmm 3 -smax ${NCAUSAL} -outdir ${OUTDIR} -o ${OUTPREFIX}

@@ -6,8 +6,7 @@ SUBDIR="${CURDIR}/submission_scripts"
 #CHAIN_JOBS="True"
 CHAIN_JOBS="False"
 
-## Do we need to create weighted LD for this simulation?
-source ${SUBDIR}/check_weighted_ld # creates RUN_WEIGHTED_LD variable and LOCIPREFIX array
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'LOCIPREFIX=($(cat ${LOCUSNAMES}))'
 
 for (( SIM=$START; SIM<=$END; SIM++ )); do 
 
@@ -27,15 +26,13 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     cd ${THIS_JOBSUBDIR}
 
-    PHENO_SIM_TYPE="fixed" # fixed, bimodal, studentsT
-
-    source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
+    #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
     ### source ${SUBDIR}/gen_inflation # now included in meta
-    source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
+    #source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
     #source ${SUBDIR}/bimbam_summary				# BIMBAM_SUMMARY_JOBNAME
     #source ${SUBDIR}/meta					# META_JOBNAME
-    source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
+    #source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
     #source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
     #source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
     #source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME

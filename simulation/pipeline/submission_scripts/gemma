@@ -1,0 +1,29 @@
+#!/bin/bash
+
+    # Run GEMMA  ======================================================================
+    for NC in ${NGEMMA}; do
+        GEMMA_JOBSUBDIR="${THIS_JOBSUBDIR}/gemma_c${NC}"
+        if [ -d ${GEMMA_JOBSUBDIR} ]; then rm -rf ${GEMMA_JOBSUBDIR}; fi
+        mkdir -p ${GEMMA_JOBSUBDIR}
+        cd ${GEMMA_JOBSUBDIR}
+
+        for LOCUSPREFIX in ${LOCIPREFIX[@]}; do
+            GEMMA_JOBNAME="gemma_${SIM}_c${NC}_${LOCUSPREFIX}_${RANDSTRING}"
+            sed -e "s|_JOBNAME|${GEMMA_JOBNAME}|g;
+                    s|_SIMDIR_|${THIS_SIMDIR}|g;
+                    s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
+                    s|_LOCUSP_|${LOCUSPREFIX}|g;
+                    s|_LOCIDIR|${DOSAGEDIR}|g;
+                    s|_NCAUSAL|${NC}|g;
+                    s|_GEMMA__|${GEMMA}|g;" ${MASTER_JOBSUBDIR}/mcmc_gemma.bsub > ${GEMMA_JOBNAME}.bsub
+            if [[ ${CHAIN_JOBS} == "True" ]]; then
+                bsub -w "done(${PHENO_JOBNAME})" < ${GEMMA_JOBNAME}.bsub
+                #echo "${THIS_SIMDIR} ${LOCUSPREFIX} ${GEMMA_JOBNAME}"
+            else
+                bsub < ${GEMMA_JOBNAME}.bsub
+                #echo "${THIS_SIMDIR} ${LOCUSPREFIX} ${GEMMA_JOBNAME}"
+            fi
+        done
+        cd ${THIS_JOBSUBDIR}
+    done
+    # =================================================================================
