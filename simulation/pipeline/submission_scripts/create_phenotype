@@ -11,6 +11,7 @@
             s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
             s|_SAMPLES|\"${STUDYSAMPLES[*]}\"|g;
             s|_HGSQUR_|${HERITABILITY}|g;
+            s|_SIMTYPE|${PHENO_SIM_TYPE}|g;
             s|_C_PROP_|${C_PROP}|g;" ${MASTER_JOBSUBDIR}/create_phenotype_with_dhs.bsub > ${PHENO_JOBNAME}.bsub
     bsub < ${PHENO_JOBNAME}.bsub
     # =================================================================================

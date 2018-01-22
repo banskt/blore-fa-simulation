@@ -18,9 +18,10 @@ STUDYNAMES=_STUDYN_
 SAMPLES=_SAMPLES
 HG2=_HGSQUR_
 CPROP=_C_PROP_
+SIM_TYPE=_SIMTYPE
 
 source $HOME/miniconda3/envs/py35/bin/activate py35
-python ${CREATEPHENO} -dl ${LOCIDIR} -df ${FEATDIR} -ds ${SIMDIR} -fl ${LOCUSNAMES} -l 100 -p ${CPROP} -hg ${HG2} -k 0.5 -st ${STUDYNAMES} -stn ${SAMPLES}
+python ${CREATEPHENO} -dl ${LOCIDIR} -df ${FEATDIR} -ds ${SIMDIR} -fl ${LOCUSNAMES} -l 100 -p ${CPROP} -hg ${HG2} -k 0.5 -st ${STUDYNAMES} -stn ${SAMPLES} -t ${SIM_TYPE}
 
 # convert to BIMBAM format
 for STUDY in ${STUDYNAMES}; do

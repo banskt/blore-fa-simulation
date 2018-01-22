@@ -1,0 +1,20 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi-short
+#BSUB -W 2:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -n 1
+#BSUB -R scratch
+#BSUB -a openmp
+
+SCRIPT=_SCRIPT_
+LOCIDIR_ORIG=_LOCIDO_
+LOCIDIR_NEW=_LOCIDN_
+STUDYNAMES=_STUDYN_
+LOCUSPREFIX=_LOCUSP_
+QCTOOL=_QCTOOL_
+
+source $HOME/miniconda3/envs/py35/bin/activate py35
+
+python ${SCRIPT} -dl ${LOCIDIR_ORIG} -fl ${LOCUSPREFIX} -st ${STUDYNAMES} -do ${LOCIDIR_NEW} --qctool ${QCTOOL}
