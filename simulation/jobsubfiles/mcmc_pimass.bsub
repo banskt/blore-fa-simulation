@@ -1,26 +1,20 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi-short
-#BSUB -W 2:00
+#BSUB -q mpi
+#BSUB -W 48:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -R scratch
-#BSUB -R span[hosts=1]
 #BSUB -n 4
-#BSUB -a openmp
-
-module load openblas/dynamic/0.2.18 
-module load gcc/6.3.0
-module load gemma/0.97 ## GEMMA depends on the previous two modules
 
 SIMDIR=_SIMDIR_
 LOCUSPREFIX=_LOCUSP_
 LOCIDIR=_LOCIDIR
 NCAUSAL=_NCAUSAL
-GEMMA=_GEMMA__
+PIMASS=_PIMASS_
 
 GENODIR="${LOCIDIR}/combined"
-OUTDIR="${SIMDIR}/gemma/c${NCAUSAL}"
+OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}"
 OUTPREFIX="${LOCUSPREFIX}"
 COMBINED_SAMPLEDIR="${SIMDIR}/samples/combined"
 
@@ -30,4 +24,7 @@ BIMBAM_ANNOT="${GENODIR}/${LOCUSPREFIX}.matmap"
 
 if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
 
-${GEMMA} -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -a ${BIMBAM_ANNOT} -rmin 1 -bslmm 3 -smax ${NCAUSAL} -outdir ${OUTDIR} -o ${OUTPREFIX}
+CWD=`pwd`
+cd ${OUTDIR}
+$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -cc -w 10000 -s 1000000 -num 100 -smax 4
+cd ${CWD}

@@ -27,6 +27,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     cd ${THIS_JOBSUBDIR}
 
     #source ${SUBDIR}/create_phenotype 				# PHENO_JOBNAME
+    #source ${SUBDIR}/combine_phenotype
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
     ### source ${SUBDIR}/gen_inflation # now included in meta
     #source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
@@ -41,7 +42,8 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
     #source ${SUBDIR}/finemap
     #source ${SUBDIR}/metacca
-    source ${SUBDIR}/gemma
+    #source ${SUBDIR}/mcmc_gemma
+    source ${SUBDIR}/mcmc_pimass
 
     cd $CURDIR
 

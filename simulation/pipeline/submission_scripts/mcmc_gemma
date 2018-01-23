@@ -1,21 +1,6 @@
 #!/bin/bash
 
     # Run GEMMA  ======================================================================
-    COMBINED_SAMPLEDIR="${THIS_SIMDIR}/samples/combined"
-    COMBINED_SAMPLEFILE="${COMBINED_SAMPLEDIR}/phenotypes.sample"
-    if [ ! -d ${COMBINED_SAMPLEDIR} ]; then mkdir -p ${COMBINED_SAMPLEDIR}; fi
-    if [ -f ${COMBINED_SAMPLEFILE} ]; then rm -rf ${COMBINED_SAMPLEFILE}; fi
-    
-    SAMPLEFILE="${THIS_SIMDIR}/samples/${STUDYNAMES[0]}/phenotypes.sample"
-    head -n 2 ${SAMPLEFILE} > ${COMBINED_SAMPLEFILE}
-    
-    for STUDY in ${STUDYNAMES[@]}; do
-        SAMPLEFILE="${THIS_SIMDIR}/samples/${STUDY}/phenotypes.sample"
-        tail -n +3 ${SAMPLEFILE} >> ${COMBINED_SAMPLEFILE}
-    done
-    BIMBAM_PHENO="${COMBINED_SAMPLEDIR}/phenotypes.sample.bimbam"
-    tail -n +3 ${COMBINED_SAMPLEFILE} | awk '{print $7}' > ${BIMBAM_PHENO}
-
     for NC in ${NGEMMA}; do
         GEMMA_JOBSUBDIR="${THIS_JOBSUBDIR}/gemma_c${NC}"
         if [ -d ${GEMMA_JOBSUBDIR} ]; then rm -rf ${GEMMA_JOBSUBDIR}; fi

@@ -17,6 +17,7 @@ SCRIPTDIR="${CURDIR}/../scripts"
 
 # external programs required for the pipeline
 BLORE="${HOME}/fine-mapping-SNPs/codebase/b-lore/bin/blore"
+PIMASS="${HOME}/packages/pimass/pimass"
 GEMMA="gemma"
 
 # other scripts used in the pipeline

@@ -6,3 +6,4 @@ __pycache__
 Makefile
 Makefile*
 jobsubs
+mcmc_vs_qL
