@@ -1,10 +1,11 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi
-#BSUB -W 48:00
+#BSUB -q mpi-short
+#BSUB -W 2:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -R scratch
+#BSUB -R span[hosts=1]
 #BSUB -n 4
 
 SIMDIR=_SIMDIR_
@@ -14,7 +15,7 @@ NCAUSAL=_NCAUSAL
 PIMASS=_PIMASS_
 
 GENODIR="${LOCIDIR}/combined"
-OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}"
+OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}_linear"
 OUTPREFIX="${LOCUSPREFIX}"
 COMBINED_SAMPLEDIR="${SIMDIR}/samples/combined"
 
@@ -26,5 +27,5 @@ if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
 
 CWD=`pwd`
 cd ${OUTDIR}
-$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -cc -w 10000 -s 1000000 -num 100 -smax 4
+$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -w 10000 -s 1000000 -num 100 -smax ${NCAUSAL}
 cd ${CWD}

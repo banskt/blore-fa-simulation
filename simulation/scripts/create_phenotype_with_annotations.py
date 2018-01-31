@@ -92,7 +92,7 @@ def parse_args():
                         type=str,
                         dest='simtype',
                         metavar='STR',
-                        help='type of beta distribution to be used for phenotype')
+                        help='type of beta distribution to be used for phenotype -- fixed, unimodal, bimodal, studentsT')
 
 
     opts = parser.parse_args()
@@ -323,37 +323,12 @@ elif opts.simtype == 'bimodal':
             beta[i] = np.random.normal(mean2, mvar)
 elif opts.simtype == 'studentsT':
     beta = np.random.standard_t(1, size = ncausal)
+elif opts.simtype == 'unimodal':
+    beta = np.random.normal(0.5, 0.3)
 else:
     beta = np.random.rand(ncausal)
 
 beta *= np.sqrt( opts.sigma_herited_sq / np.sum(np.square(beta)) )
-
-# Generate betasq from chisquare_1 distribution
-#betasq = np.random.chisquare(1, size=ncausal)
-#betasq = np.square(beta)
-#betasq = np.ones(ncausal)
-# Normalize
-#betasq /= np.sum(betasq) / opts.sigma_herited_sq
-#beta = np.sqrt(betasq)
-
-# Generate beta from Student's T-distribution
-#beta = np.random.standard_t(1, size = ncausal)
-#beta *= np.sqrt( opts.sigma_herited_sq / np.sum(np.square(beta)) )
-
-
-## Generate beta from bimodal distribution
-#mean1 = 0.5
-#mean2 = -0.5
-#mvar = 0.2
-#beta = np.zeros(ncausal)
-#for i in range(ncausal):
-#    mrandom = np.random.uniform()
-#    if mrandom <= 0.5:
-#        beta[i] = np.random.normal(mean1, mvar)
-#    else:
-#        beta[i] = np.random.normal(mean2, mvar)
-## now scale it to obtain input heritability
-#beta *= np.sqrt( opts.sigma_herited_sq / np.sum(np.square(beta)) )
 
 # Simulate phenotype for each study
 for i, study in enumerate(studies):

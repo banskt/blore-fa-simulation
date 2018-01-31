@@ -1,6 +1,17 @@
 #!/bin/bash
 
 CURDIR=`pwd`
+PHENO_SIM_TYPE="fixed" # fixed, studentsT, unimodal, bimodal
+
+START=2
+END=50
+NCAUSAL="2 4 6"
+MUVAR="var 0"
+HERITABILITY=0.25
+C_PROP=0.01
+NSAMPLE_TOT=13082
+NCAVIAR="1 2"
+NFINEMAP="2 4 6 10"
 
 # data directories
 BASEDIR="/scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/meta_nold"
@@ -18,7 +29,7 @@ FEATURE_NAMES="${ANNOTDIR}/functional_annotation_names.dat"
 
 # Pipeline directories
 MASTER_JOBSUBDIR="${CURDIR}/../jobsubfiles"
-JOBSUBDIR="${CURDIR}/jobsubs"
+JOBSUBDIR="${CURDIR}/../jobsubs/meta_nold_${PHENO_SIM_TYPE}"
 SCRIPTDIR="${CURDIR}/../scripts"
 
 # external programs required for the pipeline
@@ -37,12 +48,3 @@ CREATEPHENO="${SCRIPTDIR}/create_phenotype_with_annotations.py"
 GENINF="${SCRIPTDIR}/genomic_inflation_factor.py"
 WEIGHTED_LD="${SCRIPTDIR}/weighted_ld.py"
 SELECT_FEATURES_PAINTOR="${SCRIPTDIR}/select_paintor_annotations.py"
-
-START=1
-END=50
-NCAUSAL=2
-HERITABILITY=0.25
-C_PROP=0.01
-NSAMPLE_TOT=13082
-NCAVIAR="1 2"
-NFINEMAP="2 4 6"

@@ -15,7 +15,7 @@
                     s|_LOCUSP_|${LOCUSPREFIX}|g;
                     s|_LOCIDIR|${DOSAGEDIR}|g;
                     s|_NCAUSAL|${NC}|g;
-                    s|_PIMASS__|${PIMASS}|g;" ${MASTER_JOBSUBDIR}/mcmc_pimass.bsub > ${PIMASS_JOBNAME}.bsub
+                    s|_PIMASS_|${PIMASS}|g;" ${MASTER_JOBSUBDIR}/mcmc_pimass.bsub > ${PIMASS_JOBNAME}.bsub
             if [[ ${CHAIN_JOBS} == "True" ]]; then
                 bsub -w "done(${PHENO_JOBNAME})" < ${PIMASS_JOBNAME}.bsub
                 #echo "${THIS_SIMDIR} ${LOCUSPREFIX} ${PIMASS_JOBNAME}"

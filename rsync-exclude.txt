@@ -3,7 +3,7 @@
 .ipynb_checkpoints
 __pycache__
 *.so
+*.swp
 Makefile
 Makefile*
 jobsubs
-mcmc_vs_qL
