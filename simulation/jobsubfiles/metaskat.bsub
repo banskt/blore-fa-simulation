@@ -1,0 +1,45 @@
+#!/bin/sh
+#BSUB -J _JOBNAME
+#BSUB -q mpi
+#BSUB -W 48:00
+#BSUB -o _JOBNAME.out
+#BSUB -e _JOBNAME.err
+#BSUB -R scratch
+#BSUB -n 1
+
+SIMDIR=_SIMDIR_
+STUDYNAMES=_STUDYN_
+LOCUSNAMES=_LOCUSN_
+LOCIDIR=_LOCIDIR
+METASKAT=_MSKAT__
+
+module load plink/1.90
+module load R/3.4.1
+
+CWD=`pwd`
+for STUDY in ${STUDYNAMES}; do
+    GENODIR="${LOCIDIR}/${STUDY}"
+    OUTDIR="${SIMDIR}/metaskat/${STUDY}"
+    if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
+
+    cd ${OUTDIR}
+    while read LOCUSPREFIX; do
+        BGENFILE="${GENODIR}/${LOCUSPREFIX}.bgen"
+        MAPFILE="${GENODIR}/${LOCUSPREFIX}.map"
+        SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
+        OUTPREFIX="${LOCUSPREFIX}"
+        plink --bgen ${BGENFILE} --sample ${SAMPLEFILE} --make-bed --out ${OUTPREFIX}
+        cat ${MAPFILE} | awk -v setid=${LOCUSPREFIX} '{printf "%s %s\n", setid, $2}' > ${OUTPREFIX}.SetID
+    done < ${LOCUSNAMES}
+    cd ${CWD}
+
+done
+
+Rscript ${METASKAT} --studies ${STUDYNAMES} --locusnames ${LOCUSNAMES} --outdir ${SIMDIR}/metaskat --outfile ${SIMDIR}/metaskat/Locus.results
+
+# Remove the temporary files
+for STUDY in ${STUDYNAMES}; do
+    OUTDIR="${SIMDIR}/metaskat/${STUDY}"
+    rm -rf ${OUTDIR}
+done
+

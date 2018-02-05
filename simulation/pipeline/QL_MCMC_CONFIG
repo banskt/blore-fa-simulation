@@ -12,13 +12,14 @@ LOCUSNAMES="${BASEDIR}/LOCUSNAMES"
 
 # Pipeline directories
 MASTER_JOBSUBDIR="${CURDIR}/../jobsubfiles"
-JOBSUBDIR="${CURDIR}/mcmc_vs_qL"
+JOBSUBDIR="${CURDIR}/../jobsubs/mcmc_vs_qL"
 SCRIPTDIR="${CURDIR}/../scripts"
 
 # external programs required for the pipeline
 BLORE="${HOME}/fine-mapping-SNPs/codebase/b-lore/bin/blore"
 PIMASS="${HOME}/packages/pimass/pimass/pimass"
 GEMMA="gemma"
+BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
 
 # other scripts used in the pipeline
 CREATEPHENO="${SCRIPTDIR}/create_phenotype.py"
@@ -31,4 +32,5 @@ C_PROP=0.01
 NSAMPLE_TOT=13082
 NGEMMA="2"
 NPIMASS="4"
+NBIMBAM="2"
 PHENO_SIM_TYPE="fixed" # fixed, bimodal, studentsT

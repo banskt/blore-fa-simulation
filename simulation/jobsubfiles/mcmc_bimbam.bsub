@@ -1,21 +1,20 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi-short
-#BSUB -W 2:00
+#BSUB -q mpi
+#BSUB -W 48:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -R scratch
-#BSUB -R span[hosts=1]
-#BSUB -n 4
+#BSUB -n 1
 
 SIMDIR=_SIMDIR_
 LOCUSPREFIX=_LOCUSP_
 LOCIDIR=_LOCIDIR
 NCAUSAL=_NCAUSAL
-PIMASS=_PIMASS_
+BIMBAM=_BIMBAM_
 
 GENODIR="${LOCIDIR}/combined"
-OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}_linear"
+OUTDIR="${SIMDIR}/bimbam/c${NCAUSAL}_logistic"
 OUTPREFIX="${LOCUSPREFIX}"
 COMBINED_SAMPLEDIR="${SIMDIR}/samples/combined"
 
@@ -28,6 +27,7 @@ if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
 CWD=`pwd`
 cd ${OUTDIR}
 echo "Program Start: " `date +%s`
-$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -w 10000 -s 1000000 -num 100 -smax ${NCAUSAL}
+$BIMBAM -gmode 1 -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -l ${NCAUSAL} -cc
 echo "Program End: " `date +%s`
 cd ${CWD}
+

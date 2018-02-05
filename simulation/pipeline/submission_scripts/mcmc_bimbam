@@ -1,0 +1,29 @@
+#!/bin/bash
+
+    # Run BIMBAM  ======================================================================
+    for NC in ${NBIMBAM}; do
+        BIMBAM_JOBSUBDIR="${THIS_JOBSUBDIR}/bimbam_c${NC}"
+        if [ -d ${BIMBAM_JOBSUBDIR} ]; then rm -rf ${BIMBAM_JOBSUBDIR}; fi
+        mkdir -p ${BIMBAM_JOBSUBDIR}
+        cd ${BIMBAM_JOBSUBDIR}
+
+        for LOCUSPREFIX in ${LOCIPREFIX[@]}; do
+            BIMBAM_JOBNAME="bimbam_${SIM}_c${NC}_${LOCUSPREFIX}_${RANDSTRING}"
+            sed -e "s|_JOBNAME|${BIMBAM_JOBNAME}|g;
+                    s|_SIMDIR_|${THIS_SIMDIR}|g;
+                    s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
+                    s|_LOCUSP_|${LOCUSPREFIX}|g;
+                    s|_LOCIDIR|${DOSAGEDIR}|g;
+                    s|_NCAUSAL|${NC}|g;
+                    s|_BIMBAM_|${BIMBAM}|g;" ${MASTER_JOBSUBDIR}/mcmc_bimbam.bsub > ${BIMBAM_JOBNAME}.bsub
+            if [[ ${CHAIN_JOBS} == "True" ]]; then
+                bsub -w "done(${PHENO_JOBNAME})" < ${BIMBAM_JOBNAME}.bsub
+                #echo "${THIS_SIMDIR} ${LOCUSPREFIX} ${BIMBAM_JOBNAME}"
+            else
+                bsub < ${BIMBAM_JOBNAME}.bsub
+                #echo "${THIS_SIMDIR} ${LOCUSPREFIX} ${BIMBAM_JOBNAME}"
+            fi
+        done
+        cd ${THIS_JOBSUBDIR}
+    done
+    # =================================================================================

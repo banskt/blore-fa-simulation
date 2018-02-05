@@ -5,7 +5,7 @@
             BLORE_META_FEAT_JOBNAME="blore_meta_feat_${SIM}_${RANDSTRING}_${NC}_mu${MU}"
             sed "s|_JOBNAME|${BLORE_META_FEAT_JOBNAME}|g;
                  s|_SIMDIR_|${THIS_SIMDIR}|g;
-                 s|_NCAUSAL|${NCAUSAL}|g;
+                 s|_NCAUSAL|${NC}|g;
                  s|_FEATDIR|${ANNOTDIR}|g;
                  s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
                  s|_MU_VAR_|${MU}|g;
@@ -17,4 +17,3 @@
             fi
         done
     done
-
