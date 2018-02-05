@@ -27,6 +27,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     cd ${THIS_JOBSUBDIR}
     #mkdir snptest bimbam blore caviarbf finemap paintor metaskat
+    rm -rf metaskat
     mkdir metaskat
 
     #source ${SUBDIR}/create_phenotype_with_features		# PHENO_JOBNAME

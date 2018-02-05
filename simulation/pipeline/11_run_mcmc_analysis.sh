@@ -43,8 +43,8 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/finemap
     #source ${SUBDIR}/metacca
     #source ${SUBDIR}/mcmc_gemma
-    #source ${SUBDIR}/mcmc_pimass
-    source ${SUBDIR}/mcmc_bimbam
+    source ${SUBDIR}/mcmc_pimass
+    #source ${SUBDIR}/mcmc_bimbam
 
     cd $CURDIR
 

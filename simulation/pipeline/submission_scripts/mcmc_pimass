@@ -2,7 +2,7 @@
 
     # Run PIMASS  ======================================================================
     for NC in ${NPIMASS}; do
-        PIMASS_JOBSUBDIR="${THIS_JOBSUBDIR}/pimass_c${NC}"
+        PIMASS_JOBSUBDIR="${THIS_JOBSUBDIR}/pimass_c${NC}_5e6"
         if [ -d ${PIMASS_JOBSUBDIR} ]; then rm -rf ${PIMASS_JOBSUBDIR}; fi
         mkdir -p ${PIMASS_JOBSUBDIR}
         cd ${PIMASS_JOBSUBDIR}

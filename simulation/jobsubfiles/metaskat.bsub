@@ -5,7 +5,8 @@
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -R scratch
-#BSUB -n 1
+#BSUB -n 4
+#BSUB -a openmp
 
 SIMDIR=_SIMDIR_
 STUDYNAMES=_STUDYN_
@@ -35,6 +36,7 @@ for STUDY in ${STUDYNAMES}; do
 
 done
 
+if [ -f ${SIMDIR}/metaskat/Locus.results ]; then rm -rf ${SIMDIR}/metaskat/Locus.results; fi
 Rscript ${METASKAT} --studies ${STUDYNAMES} --locusnames ${LOCUSNAMES} --outdir ${SIMDIR}/metaskat --outfile ${SIMDIR}/metaskat/Locus.results
 
 # Remove the temporary files
