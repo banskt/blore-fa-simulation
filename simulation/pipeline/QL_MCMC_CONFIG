@@ -24,14 +24,16 @@ BIMBAM="${HOME}/packages/BIMBAM/bimbam/bimbam"
 # other scripts used in the pipeline
 CREATEPHENO="${SCRIPTDIR}/create_phenotype.py"
 
-START=1
-END=10
-NCAUSAL="2 4"
-MUVAR="0"
+START=101
+END=110
+NCAUSAL="4"
+MUVAR="var 0"
 HERITABILITY=0.4
 C_PROP=0.01
 NSAMPLE_TOT=13082
 NGEMMA="2"
 NPIMASS="4"
+MODEL_PIMASS="probit linear"
 NBIMBAM="2"
-PHENO_SIM_TYPE="fixed" # fixed, bimodal, studentsT
+#PHENO_SIM_TYPE="fixed" # fixed, bimodal, studentsT
+PHENO_SIM_TYPE="bimodal"

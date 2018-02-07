@@ -1,0 +1,26 @@
+## 
+## COMMAND: /usr/users/sbanerj/packages/BIMBAM/bimbam/bimbam -gmode 1 -g /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.067.matgen -p /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/simulations/sim001/samples/combined/phenotypes.sample.bimbam -pos /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.067.matmap -o Locus.067 -l 2 -cc 
+## randseed = 1517641929
+## BIMBAM: Use default priors
+## BIMBAM: Number of position files = 1
+## BIMBAM: Position files contain 192 records.
+## BIMBAM: File 0 has 13082 ind's and 192 SNPs
+## number genotype files = 1
+## number phenotype files = 1
+## number of diploid = 13082
+## number of haploid = 0
+## number of panel individuals = 0
+## number of cohort = 13082
+## number of snp = 192
+## number cohort only snp = 192
+###: number of phenotypes = 1
+## EM seconds used = 0
+### nPH = 1
+## calc stat seconds used =23
+## Write posterior probability matrix to a file.
+## Bimbam generate following files in the output directory.
+## Locus.067.snpdata.txt
+## Locus.067.single.txt
+## Locus.067.summary.txt
+## Locus.067.multi.txt
+## random seed = 1517641929

@@ -4,7 +4,7 @@
 #BSUB -W 48:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
-#BSUB -n 8
+#BSUB -n 4
 #BSUB -R span[hosts=1]
 #BSUB -R scratch
 #BSUB -a openmp

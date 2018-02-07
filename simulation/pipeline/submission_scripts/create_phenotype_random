@@ -1,0 +1,23 @@
+#!/bin/bash
+
+    for STUDY in ${STUDYNAMES[@]}; do
+        INFILE="${DOSAGEDIR}/${STUDY}/${STUDY}_QC.sample"
+        OUTDIR="${THIS_SIMDIR}/samples/${STUDY}"
+        if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
+        OUTFILE="${OUTDIR}/phenotypes.sample"
+
+        RANDSTRING=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1`
+        TMPFILE="tmp_${RANDSTRING}.sample"
+        
+        head -n 2 ${INFILE} > ${OUTFILE}
+        tail -n +3 ${INFILE} > ${TMPFILE}
+        
+        
+        SPOTS=2
+        PHENO=0
+        while read SAMPLE; do
+            let "PHENO = $RANDOM % $SPOTS"
+            echo ${SAMPLE} | awk -v mpheno=${PHENO} '{$7=mpheno; print}' >> ${OUTFILE}
+        done < ${TMPFILE}
+
+    done

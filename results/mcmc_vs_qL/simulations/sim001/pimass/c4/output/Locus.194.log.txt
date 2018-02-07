@@ -1,0 +1,22 @@
+## 
+## COMMAND: /usr/users/sbanerj/packages/pimass/pimass/pimass -g /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.194.matgen -p /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/simulations/sim001/samples/combined/phenotypes.sample.bimbam -pos /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.194.matmap -o Locus.194 -cc -w 10000 -s 1000000 -num 100 -smax 4 
+## randseed = 1517066425
+## pimass: Number of position files = 1
+## pimass: Position files contain 95 records.
+## pimass: File 0 has 13082 ind's and 95 SNPs
+## number genotype files = 1
+## number phenotype files = 1
+## number of cohort = 13082
+## number of snp = 95
+### number of phenotypes = 13082
+### number of individual that has valid phenotypes = 13082
+### proposal time = 14.0649
+### computation time = 341.164
+### get_gXX time = 113.416
+### inner product time = 0.229696
+### get_gXX inner loop  = 1.31298
+### map_looking + inner_product = 1.31298
+### recent map lookup = 5.19912e+06
+### main map lookup = 4560
+### main map miss = 0
+## random seed = 1517066425

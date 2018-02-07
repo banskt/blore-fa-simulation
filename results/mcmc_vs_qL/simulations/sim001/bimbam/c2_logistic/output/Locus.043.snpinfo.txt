@@ -1,0 +1,8 @@
+## af is the allele freq for A, the minor allele
+rs	 A	 B	 af 	 chr 	 pos
+rs7286414	 A G	0.293	1	42716632
+rs5758750	 A G	0.089	1	42876791
+rs5758752	 T C	0.087	1	42878831
+rs5758754	 T C	0.087	1	42883002
+rs5751284	 T C	0.086	1	42884431
+rs5758756	 G A	0.087	1	42884997

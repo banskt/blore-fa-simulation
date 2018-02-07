@@ -1,0 +1,27 @@
+## Summary of overall evidence for association with region:
+## log10(BF for region) = -0.504338
+## p-value for region = NA
+
+## BFs for choosing among multi-SNP models:
+## log10(average 1-SNP BF) = -0.451476
+## log10(average 2-SNP BF) = -0.634446
+
+## Example posterior probabilities for multi-SNP models, based on default prior: [p(l) propto 0.5^l for l=1,2,...,L]
+## posterior probability of 1-SNP = 0.752958
+## posterior probability of 2-SNP = 0.247042
+
+## log10(BF) for single SNP and pair of SNPs:
+rs7286414      -0.494	-0.791	-0.801	-0.794	-0.795	-0.793	
+rs5758750      -0.791	-0.440	-0.559	-0.580	-0.577	-0.587	
+rs5758752      -0.801	-0.559	-0.449	-0.571	-0.566	-0.571	
+rs5758754      -0.794	-0.580	-0.571	-0.443	-0.566	-0.575	
+rs5751284      -0.795	-0.577	-0.566	-0.566	-0.443	-0.570	
+rs5758756      -0.793	-0.587	-0.571	-0.575	-0.570	-0.442	
+
+## posterior probabilities for single SNP and pair of SNPs:
+rs7286414      +0.091	+0.018	+0.018	+0.018	+0.018	+0.018	
+rs5758750      +0.018	+0.103	+0.031	+0.030	+0.030	+0.029	
+rs5758752      +0.018	+0.031	+0.101	+0.031	+0.031	+0.031	
+rs5758754      +0.018	+0.030	+0.031	+0.103	+0.031	+0.030	
+rs5751284      +0.018	+0.030	+0.031	+0.031	+0.103	+0.031	
+rs5758756      +0.018	+0.029	+0.031	+0.030	+0.031	+0.103	

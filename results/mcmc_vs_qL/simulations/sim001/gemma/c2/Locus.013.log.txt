@@ -1,0 +1,50 @@
+##
+## GEMMA Version    = 0.97 (2018/01/18)
+## GSL Version      = 2.3
+## Eigen Version    = 3.3.4
+## OpenBlas         = OpenBLAS 0.2.18  - NO_LAPACKE DYNAMIC_ARCH NO_AFFINITY Sandybridge
+##   arch           = Sandybridge
+##   threads        = 1
+##   parallel type  = sequential
+##
+## Command Line Input = gemma -g /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.013.matgen -p /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/simulations/sim001/samples/combined/phenotypes.sample.bimbam -a /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/loci_dosages/combined/Locus.013.matmap -rmin 1 -bslmm 3 -smax 2 -outdir /scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/mcmc_vs_qL/simulations/sim001/gemma/c2 -o Locus.013 
+##
+## Date = Tue Jan 23 03:03:21 2018
+##
+## Summary Statistics:
+## number of total individuals = 13082
+## number of analyzed individuals = 13082
+## number of covariates = 1
+## number of phenotypes = 1
+## number of total SNPs/var = 197
+## number of analyzed SNPs/var = 197
+## number of cases = 6493
+## number of controls = 6589
+## REMLE log-likelihood in the null model = 0
+## MLE log-likelihood in the null model = 0
+## pve estimate in the null model = 0
+## se(pve) in the null model = 0
+## vg estimate in the null model = 0
+## ve estimate in the null model = 0
+## beta estimate in the null model = 
+## se(beta) = 
+## estimated mean = -921.1
+##
+## MCMC related:
+## initial value of h = 0.1
+## initial value of rho = 1
+## initial value of pi = 0.0101523
+## initial value of |gamma| = 2
+## random seed = 3897
+## acceptance ratio = 0.542147
+##
+## Computation Time:
+## total computation time = 58.097 min 
+## computation time break down: 
+##      time on calculating relatedness matrix = 0 min 
+##      time on eigen-decomposition = 0 min 
+##      time on calculating UtX = 0 min 
+##      time on proposal = 0.000333333 min 
+##      time on mcmc = 58.087 min 
+##      time on Omega = 9.22267 min 
+##

@@ -1,0 +1,7 @@
+Time taken
+=============
+	Total time: 1127.07 sec
+	Preprocessing: 36.197834 sec
+	Optimization: 1080.94 sec
+	B-LORE time: 1117.135216 sec # Preprocessing + Optimization
+	Write result: 9.93 sec

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+    if [ ! -d blore ];then mkdir blore; fi
+    cd blore
+
+
     for NC in ${NCAUSAL}; do
         for MU in ${MUVAR}; do
             BLORE_META_FEAT_JOBNAME="blore_meta_feat_${SIM}_${RANDSTRING}_${NC}_mu${MU}"
@@ -17,3 +21,5 @@
             fi
         done
     done
+
+    cd ..

@@ -5,7 +5,7 @@
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -R scratch
-#BSUB -n 4
+#BSUB -n 1
 #BSUB -a openmp
 
 SIMDIR=_SIMDIR_
@@ -44,4 +44,3 @@ for STUDY in ${STUDYNAMES}; do
     OUTDIR="${SIMDIR}/metaskat/${STUDY}"
     rm -rf ${OUTDIR}
 done
-

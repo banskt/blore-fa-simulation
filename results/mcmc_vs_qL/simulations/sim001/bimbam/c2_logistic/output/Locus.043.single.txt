@@ -1,0 +1,8 @@
+## bf=log10_BF	se=log10_std_err	pv=p-value	
+rsnum	 	pos 	chr 	bf 	se 	rank 	pv
+rs7286414      	42716632	1	-0.616	 NA 	 1		 NA	
+rs5758750      	42876791	1	-0.446	 NA 	 2		 NA	
+rs5758752      	42878831	1	-0.409	 NA 	 3		 NA	
+rs5758754      	42883002	1	-0.414	 NA 	 4		 NA	
+rs5751284      	42884431	1	-0.398	 NA 	 5		 NA	
+rs5758756      	42884997	1	-0.399	 NA 	 6		 NA	

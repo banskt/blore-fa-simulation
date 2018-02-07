@@ -13,22 +13,25 @@ SIMDIR=_SIMDIR_
 LOCUSPREFIX=_LOCUSP_
 LOCIDIR=_LOCIDIR
 NCAUSAL=_NCAUSAL
+MODEL=_MODEL__
 PIMASS=_PIMASS_
 
 GENODIR="${LOCIDIR}/combined"
-OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}_5e6"
+OUTDIR="${SIMDIR}/pimass/c${NCAUSAL}_5e6_${MODEL}"
 OUTPREFIX="${LOCUSPREFIX}"
 COMBINED_SAMPLEDIR="${SIMDIR}/samples/combined"
 
 BIMBAM_PHENO="${COMBINED_SAMPLEDIR}/phenotypes.sample.bimbam"
 BIMBAM_GENO="${GENODIR}/${LOCUSPREFIX}.matgen"
 BIMBAM_ANNOT="${GENODIR}/${LOCUSPREFIX}.matmap"
+MODEL_FLAG=""
+if [ ${MODEL} == "probit" ]; then MODEL_FLAG="-cc"; fi
 
 if [ ! -d ${OUTDIR} ]; then mkdir -p ${OUTDIR}; fi
 
 CWD=`pwd`
 cd ${OUTDIR}
 echo "Program Start: " `date +%s`
-$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -w 50000 -s 5000000 -num 100 -smax ${NCAUSAL}
+$PIMASS -g ${BIMBAM_GENO} -p ${BIMBAM_PHENO} -pos ${BIMBAM_ANNOT} -o ${OUTPREFIX} -w 50000 -s 5000000 -num 100 -smax ${NCAUSAL} ${MODEL_FLAG}
 echo "Program End: " `date +%s`
 cd ${CWD}
