@@ -1,0 +1,7 @@
+#!/bin/bash
+
+    USELOCI="${THIS_SIMDIR}/LOCUSNAMES_CAUSAL"
+    CAUSAL_SNPLIST="${THIS_SIMDIR}/samples/causal.snplist"
+    if [ ! -f ${USELOCI} ]; then
+        cat ${CAUSAL_SNPLIST} | grep "Causality: 1" | cut -d" " -f2 | cut -d"," -f1 | awk '{printf "Locus.%03d\n", $1}' > ${USELOCI}
+    fi

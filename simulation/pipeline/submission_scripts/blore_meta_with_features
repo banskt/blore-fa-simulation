@@ -2,17 +2,18 @@
 
     if [ ! -d blore ];then mkdir blore; fi
     cd blore
-
+    NLOCI=`wc -l ${USELOCI} | awk '{print $1}'`
 
     for NC in ${NCAUSAL}; do
         for MU in ${MUVAR}; do
-            BLORE_META_FEAT_JOBNAME="blore_meta_feat_${SIM}_${RANDSTRING}_${NC}_mu${MU}"
+            BLORE_META_FEAT_JOBNAME="blore_meta_feat_${SIM}_${NLOCI}loci_${RANDSTRING}_${NC}_mu${MU}"
             sed "s|_JOBNAME|${BLORE_META_FEAT_JOBNAME}|g;
                  s|_SIMDIR_|${THIS_SIMDIR}|g;
                  s|_NCAUSAL|${NC}|g;
                  s|_FEATDIR|${ANNOTDIR}|g;
                  s|_STUDYN_|\"${STUDYNAMES[*]}\"|g;
                  s|_MU_VAR_|${MU}|g;
+                 s|_USELOCI|${USELOCI}|g;
                  s|_B_LORE_|${BLORE}|g;" ${MASTER_JOBSUBDIR}/blore_with_features.bsub > ${BLORE_META_FEAT_JOBNAME}.bsub
             if [[ ${CHAIN_JOBS} == "True" ]]; then
                 bsub -w "done(${BLORE_SUMMARY_JOBNAME}*)" < ${BLORE_META_FEAT_JOBNAME}.bsub

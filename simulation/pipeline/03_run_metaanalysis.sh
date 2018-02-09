@@ -13,7 +13,7 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
 
     INDEX=`echo $SIM | awk '{printf "%03d", $1}'`
     SIMFOLDER="sim${INDEX}"
-    RANDSTRING=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 10 | head -n 1`
+    RANDSTRING=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 4 | head -n 1`
 
     THIS_JOBSUBDIR="${JOBSUBDIR}/${SIMFOLDER}"
     THIS_SIMDIR="${SIMDIR}/${SIMFOLDER}"
@@ -30,17 +30,19 @@ for (( SIM=$START; SIM<=$END; SIM++ )); do
     #source ${SUBDIR}/create_phenotype_with_features		# PHENO_JOBNAME
     #source ${SUBDIR}/create_phenotype_random
     #source ${SUBDIR}/snptest					# SNPTEST_JOBNAME
-    #source ${SUBDIR}/blore_summary				# BLORE_SUMMARY_JOBNAME
+    #source ${SUBDIR}/list_causal_loci				# update ${USELOCI} variable
+    #source ${SUBDIR}/blore_summary
+    ##source ${SUBDIR}/blore_summary_benchmark			# BLORE_SUMMARY_JOBNAME
     #source ${SUBDIR}/bimbam_summary				# BIMBAM_SUMMARY_JOBNAME
     #source ${SUBDIR}/meta					# META_JOBNAME
-    source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
+    #source ${SUBDIR}/blore_meta_without_features		# BLORE_META_JOBNAME
     #source ${SUBDIR}/blore_meta_with_features			# BLORE_META_FEAT_JOBNAME
     #source ${SUBDIR}/bimbam_meta				# BIMBAM_META_JOBNAME
     #source ${SUBDIR}/weighted_ld				# WGT_LD_JOBNAME
     #source ${SUBDIR}/paintor					# PAINTOR_JOBNAME
     #source ${SUBDIR}/paintor_fa  				# PAINTORFA_JOBNAME
-    #source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
-    #source ${SUBDIR}/finemap
+    source ${SUBDIR}/caviarbf					# CAVIARBF_JOBNAME
+    source ${SUBDIR}/finemap
     #source ${SUBDIR}/metaskat
     #source ${SUBDIR}/jam
 

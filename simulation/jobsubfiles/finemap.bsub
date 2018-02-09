@@ -1,11 +1,12 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi
-#BSUB -W 48:00
+#BSUB -q mpi-short
+#BSUB -W 2:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -n 1
 #BSUB -R scratch
+#BSUB -R "intel=2"
 
 SIMDIR=_SIMDIR_
 NC=_NCAUSAL
@@ -49,7 +50,9 @@ for file in ${METADIR}/*.meta.out; do
 
     echo "${LOCUSFILE};${FBASE}.ld;${SNPFILE};${CONFIGFILE};${NTOT}" >> data
 done
+echo "bProgram Start: " `date +%s`
 ${FINEMAP} --sss --in-files data --n-causal-max ${NC}
+echo "bProgram End: " `date +%s`
 rm -rf *.ld
 
 cd ${CWD}

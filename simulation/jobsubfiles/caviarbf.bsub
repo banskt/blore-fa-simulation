@@ -1,11 +1,12 @@
 #!/bin/sh
 #BSUB -J _JOBNAME
-#BSUB -q mpi
+#BSUB -q mpi-short
 #BSUB -W 2:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
 #BSUB -n 1
 #BSUB -R scratch
+#BSUB -R "intel=2"
 
 SIMDIR=_SIMDIR_
 CAVIARBF=_CVIARBF
@@ -46,12 +47,20 @@ for file in ${METADIR}/*.meta.out; do
     LDFILE="${FBASE}.LD"
     cp ${WT_LDDIR}/${LDFILE} ${OUTDIR}/
 
+done
+
+echo "bProgram Start: " `date +%s`
+for file in ${METADIR}/*.meta.out; do
+    FBASE=`basename ${file} .meta.out`
+    LOCUSFILE=${FBASE}
+    LDFILE="${FBASE}.LD"
     BFFILE="${FBASE}.bf"
     OUTFILE="${FBASE}.prior0"
     NSNPS=`wc -l ${LOCUSFILE} | cut -d' ' -f1`
     ${CAVIARBF} -z ${LOCUSFILE} -r ${LDFILE} -t 0 -a 0.1 --appr -n ${NTOT} -c ${NC} -o ${BFFILE}
     ${MODEL_SEARCH} -i ${BFFILE} -m ${NSNPS} -p 0 -o ${OUTFILE}
-    rm -rf ${LDFILE}
 done
+echo "bProgram End: " `date +%s`
 
+rm -rf *.LD
 cd ${CWD}

@@ -15,13 +15,22 @@ BLORE=_B_LORE_
 FEATDIR=_FEATDIR
 STUDYNAMES=_STUDYN_
 MUVAR=_MU_VAR_
+USELOCI=_USELOCI
 
-OUTDIR="${SIMDIR}/blore/meta_with_feature/zmax${NZ}_mu${MUVAR}_pi0.01_sig0.01"
-BLORE_SUMMARY_DIR="${SIMDIR}/blore/summary_stat"
+NLOCI=`wc -l ${USELOCI} | awk '{print $1}'`
+BLORE_DIRNAME="blore_${NLOCI}"
+
+OUTDIR="${SIMDIR}/${BLORE_DIRNAME}/meta_with_feature/zmax${NZ}_mu${MUVAR}_pi0.01_sig0.01"
+BLORE_SUMMARY_DIR="${SIMDIR}/${BLORE_DIRNAME}/summary_stat"
 COHORT_PREFIXES=""
 for STUDY in ${STUDYNAMES}; do
     COHORT_PREFIXES+="${BLORE_SUMMARY_DIR}/${STUDY}/${STUDY}_summary "
 done
+
+FEATFILES=""
+while read LOCUSPREFIX; do
+    FEATFILES+="${FEATDIR}/${LOCUSPREFIX}.dhs "
+done < ${USELOCI}
 
 
 if [ ! -d ${OUTDIR} ]; then
@@ -31,7 +40,7 @@ fi
 source $HOME/miniconda3/envs/py35/bin/activate py35
 
 if [[ ${MUVAR} == "var" ]]; then
-    $BLORE --meta --statinfo ${COHORT_PREFIXES} --feature ${FEATDIR}/*.dhs --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta' --muvar
+    $BLORE --meta --statinfo ${COHORT_PREFIXES} --feature ${FEATFILES} --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta' --muvar
 elif [[ ${MUVAR} == "0" ]]; then
-    $BLORE --meta --statinfo ${COHORT_PREFIXES} --feature ${FEATDIR}/*.dhs --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta'
+    $BLORE --meta --statinfo ${COHORT_PREFIXES} --feature ${FEATFILES} --out ${OUTDIR} --zmax ${NZ} --params 0.01 0 0.01 0.01 --prefix='blore_meta'
 fi

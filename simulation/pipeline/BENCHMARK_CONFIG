@@ -6,32 +6,31 @@ CURDIR=`pwd`
 #START=101
 #END=150
 
-PHENO_SIM_TYPE="fixed"
-START=1
-END=50
+#PHENO_SIM_TYPE="fixed"
+#START=1
+#END=50
 
-#PHENO_SIM_TYPE="random"
-#START=71
-#END=75
+PHENO_SIM_TYPE="random"
+START=151
+END=200
 
 NCAUSAL="2 4"
 MUVAR="var 0"
 HERITABILITY=0.25
 C_PROP=0.01
-NSAMPLE_TOT=13082
+NSAMPLE_TOT=30000
 NCAVIAR="1 2"
 NFINEMAP="2 4 6 10"
 
 # data directories
-BASEDIR="/scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/meta_nold"
+BASEDIR="/scratch/sbanerj/quasi_laplace_gwas/simulated_phenotype/summary_stat_benchmark"
 DOSAGEDIR="${BASEDIR}/loci_dosages"
 ANNOTDIR="${BASEDIR}/functional_annotations"
 LDMAPDIR="${BASEDIR}/ldmap"
 SIMDIR="${BASEDIR}/simulations"
-STUDYNAMES=('G1' 'G2' 'G3' 'G4' 'G5')
-STUDYSAMPLES=('2139' '2420' '2472' '2084' '3967')
+STUDYNAMES=('POP1' 'POP2' 'POP3' 'POP4' 'POP5')
+STUDYSAMPLES=('10000' '8000' '6000' '4000' '2000')
 LOCUSNAMES="${BASEDIR}/LOCUSNAMES"
-USELOCI=${LOCUSNAMES}
 
 # External files
 FEATURE_CORRELATION="${ANNOTDIR}/func_annot_corr.dat"

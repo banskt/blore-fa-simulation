@@ -1,0 +1,28 @@
+#!/bin/bash
+
+    # Submit BLORE summary stat =======================================================
+    for NLOCI in NCAUSAL_LOCI; do
+        if [ ! -d blore_${NLOCI} ];then mkdir blore_${NLOCI}; fi
+        cd blore_${NLOCI}
+    
+        BLORE_SUMMARY_JOBNAME="blore_${SIM}_${NLOCI}_${RANDSTRING}"
+        USELOCI=${THIS_SIMDIR}/USELOCI_${NLOCI}
+        head -n ${NLOCI} ${LOCUSNAMES} > ${USELOCI}
+        for STUDY in ${STUDYNAMES[@]}; do
+            JOBNAME="${BLORE_SUMMARY_JOBNAME}_${STUDY}"
+            sed "s|_JOBNAME|${JOBNAME}|g;
+                 s|_GSTUDY_|${STUDY}|g;
+                 s|_B_LORE_|${BLORE}|g;
+                 s|_SIMDIR_|${THIS_SIMDIR}|g;
+                 s|_USELOCI|${USELOCI}|g;
+                 s|_LOCIDIR|${DOSAGEDIR}|g;" ${MASTER_JOBSUBDIR}/blore_summary.bsub > ${JOBNAME}.bsub
+            if [[ ${CHAIN_JOBS} == "True" ]]; then
+                bsub -w "done(${PHENO_JOBNAME})" < ${JOBNAME}.bsub
+            else
+                bsub < ${JOBNAME}.bsub
+            fi
+        done
+    
+        cd ..
+    done
+    # =================================================================================

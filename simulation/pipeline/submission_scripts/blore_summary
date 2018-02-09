@@ -4,13 +4,15 @@
     if [ ! -d blore ];then mkdir blore; fi
     cd blore
 
-    BLORE_SUMMARY_JOBNAME="blore_${SIM}_${RANDSTRING}"
+    NLOCI=`wc -l ${USELOCI} | awk '{print $1}'`
+    BLORE_SUMMARY_JOBNAME="blore_${SIM}_${NLOCI}loci_${RANDSTRING}"
     for STUDY in ${STUDYNAMES[@]}; do
         JOBNAME="${BLORE_SUMMARY_JOBNAME}_${STUDY}"
         sed "s|_JOBNAME|${JOBNAME}|g;
              s|_GSTUDY_|${STUDY}|g;
              s|_B_LORE_|${BLORE}|g;
              s|_SIMDIR_|${THIS_SIMDIR}|g;
+             s|_USELOCI|${USELOCI}|g;
              s|_LOCIDIR|${DOSAGEDIR}|g;" ${MASTER_JOBSUBDIR}/blore_summary.bsub > ${JOBNAME}.bsub
         if [[ ${CHAIN_JOBS} == "True" ]]; then
             bsub -w "done(${PHENO_JOBNAME})" < ${JOBNAME}.bsub

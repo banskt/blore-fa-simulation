@@ -4,7 +4,7 @@
 #BSUB -W 48:00
 #BSUB -o _JOBNAME.out
 #BSUB -e _JOBNAME.err
-#BSUB -n 16
+#BSUB -n 4
 #BSUB -R span[hosts=1]
 #BSUB -R scratch
 #BSUB -a openmp 
@@ -13,9 +13,14 @@ STUDY=_GSTUDY_
 BLORE=_B_LORE_
 SIMDIR=_SIMDIR_
 LOCIDIR=_LOCIDIR
+USELOCI=_USELOCI
+
+NLOCI=`wc -l ${USELOCI} | awk '{print $1}'`
+BLORE_DIRNAME="blore_${NLOCI}"
+
 
 SAMPLEFILE="${SIMDIR}/samples/${STUDY}/phenotypes.sample"
-OUTDIR="${SIMDIR}/blore/summary_stat/${STUDY}"
+OUTDIR="${SIMDIR}/${BLORE_DIRNAME}/summary_stat/${STUDY}"
 GENODIR="${LOCIDIR}/${STUDY}"
 
 if [ ! -d ${OUTDIR} ]; then
@@ -23,4 +28,10 @@ if [ ! -d ${OUTDIR} ]; then
 fi
 
 source $HOME/miniconda3/envs/py35/bin/activate py35
-$BLORE --summary --gen ${GENODIR}/Locus.*.gen --sample ${SAMPLEFILE} --out ${OUTDIR} --reg 0.01 --regoptim >> _JOBNAME.mlog 2>> _JOBNAME.merr
+
+GENOFILES=""
+while read LOCUSPREFIX; do
+    GENOFILES+="${GENODIR}/${LOCUSPREFIX}.gen "
+done < ${USELOCI}
+
+$BLORE --summary --gen ${GENOFILES} --sample ${SAMPLEFILE} --out ${OUTDIR} --reg 0.01 --regoptim >> _JOBNAME.mlog 2>> _JOBNAME.merr

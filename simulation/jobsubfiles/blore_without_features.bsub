@@ -15,15 +15,17 @@ BLORE=_B_LORE_
 FEATDIR=_FEATDIR
 STUDYNAMES=_STUDYN_
 MUVAR=_MU_VAR_
+USELOCI=_USELOCI
 
+NLOCI=`wc -l ${USELOCI} | awk '{print $1}'`
+BLORE_DIRNAME="blore_${NLOCI}"
 
-OUTDIR="${SIMDIR}/blore/meta_without_feature/zmax${NZ}_mu${MUVAR}_pi0.01_sig0.01"
-BLORE_SUMMARY_DIR="${SIMDIR}/blore/summary_stat"
+OUTDIR="${SIMDIR}/${BLORE_DIRNAME}/meta_without_feature/zmax${NZ}_mu${MUVAR}_pi0.01_sig0.01"
+BLORE_SUMMARY_DIR="${SIMDIR}/${BLORE_DIRNAME}/summary_stat"
 COHORT_PREFIXES=""
 for STUDY in ${STUDYNAMES}; do
     COHORT_PREFIXES+="${BLORE_SUMMARY_DIR}/${STUDY}/${STUDY}_summary "
 done
-
 
 if [ ! -d ${OUTDIR} ]; then
     mkdir -p ${OUTDIR}
